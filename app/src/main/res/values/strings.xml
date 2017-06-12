@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Big Nerd Ranch</string>
+
+    <!-- QuizActivity -->
+    <string name="question_text">Olympia is the capital of Washington.</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect!</string>
 </resources>
