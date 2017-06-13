@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
+    private TextView mQuestionTextview;
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
-    private TextView mQuestionTextview;
 
     private Question[] mQuestions = new Question[] {
             new Question(R.string.question_africa, false),
@@ -31,29 +31,29 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        // TextView: Question
         mQuestionTextview = (TextView) findViewById(R.id.question_textview);
         updateQuestion();
 
+        // Button: True
         mTrueButton = (Button) findViewById(R.id.true_button);
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(QuizActivity.this,
-                               R.string.correct_toast,
-                               Toast.LENGTH_SHORT).show();
+                checkAnswer(true);
             }
         });
 
+        // Button: False
         mFalseButton = (Button) findViewById(R.id.false_button);
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(QuizActivity.this,
-                               R.string.incorrect_toast,
-                               Toast.LENGTH_SHORT).show();
+                checkAnswer(false);
             }
         });
 
+        // Button: Next
         mNextButton = (Button) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,10 +64,20 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
+    // Sets mQuestionTextView to the current question
     private void updateQuestion() {
         int questionId = mQuestions[mCurrentIndex].getTextResId();
         mQuestionTextview.setText(questionId);
     }
-}
 
-// todo: Add true/false validation (currently true->correct, false->incorrect for all questions)
+    // Checks if the user guessed correctly or not
+    private void checkAnswer(boolean userPressedTrue) {
+        int resultId = R.string.correct_toast;
+
+        if (userPressedTrue != mQuestions[mCurrentIndex].isAnswerTrue()) {
+            resultId = R.string.incorrect_toast;
+        }
+
+        Toast.makeText(QuizActivity.this, resultId, Toast.LENGTH_SHORT).show();
+    }
+}
