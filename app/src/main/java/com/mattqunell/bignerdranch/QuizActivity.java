@@ -13,6 +13,7 @@ public class QuizActivity extends AppCompatActivity {
     private TextView mQuestionTextview;
     private Button mTrueButton;
     private Button mFalseButton;
+    private Button mPreviousButton;
     private Button mNextButton;
 
     private Question[] mQuestions = new Question[] {
@@ -31,8 +32,11 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
 
+        View.OnClickListener nextQuestion = new NextQuestion();
+
         // TextView: Question
         mQuestionTextview = (TextView) findViewById(R.id.question_textview);
+        mQuestionTextview.setOnClickListener(nextQuestion);
         updateQuestion();
 
         // Button: True
@@ -53,15 +57,24 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        // Button: Next
-        mNextButton = (Button) findViewById(R.id.next_button);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
+        // Button: Previous
+        mPreviousButton = (Button) findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
+                // Java's % is "remainder", not "mod", so manually wrap around if index = -1
+                mCurrentIndex -= 1;
+                if (mCurrentIndex == -1) {
+                    mCurrentIndex = mQuestions.length - 1;
+                }
+
                 updateQuestion();
             }
         });
+
+        // Button: Next
+        mNextButton = (Button) findViewById(R.id.next_button);
+        mNextButton.setOnClickListener(nextQuestion);
     }
 
     // Sets mQuestionTextView to the current question
@@ -79,5 +92,14 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         Toast.makeText(QuizActivity.this, resultId, Toast.LENGTH_SHORT).show();
+    }
+
+    // Private inner class used for mQuestionTextview and mNextButton's onClick listeners
+    private class NextQuestion implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
+            updateQuestion();
+        }
     }
 }
