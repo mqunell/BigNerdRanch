@@ -1,28 +1,23 @@
 package com.mattqunell.bignerdranch;
 
-public class Question {
+// The lack of public/protected/private modifiers makes these methods "package-private" which allows
+// access from package classes but not subclasses or world
+
+class Question {
 
     private int mTextResId;
     private boolean mAnswerTrue;
 
-    public Question(int textResId, boolean answerTrue) {
+    Question(int textResId, boolean answerTrue) {
         mTextResId = textResId;
         mAnswerTrue = answerTrue;
     }
 
-    public int getTextResId() {
+    int getTextResId() {
         return mTextResId;
     }
 
-    public void setTextResId(int textResId) {
-        mTextResId = textResId;
-    }
-
-    public boolean isAnswerTrue() {
+    boolean isAnswerTrue() {
         return mAnswerTrue;
-    }
-
-    public void setAnswerTrue(boolean answerTrue) {
-        mAnswerTrue = answerTrue;
     }
 }
