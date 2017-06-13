@@ -2,9 +2,9 @@ package com.mattqunell.bignerdranch;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,8 +13,8 @@ public class QuizActivity extends AppCompatActivity {
     private TextView mQuestionTextview;
     private Button mTrueButton;
     private Button mFalseButton;
-    private Button mPreviousButton;
-    private Button mNextButton;
+    private ImageButton mPreviousButton;
+    private ImageButton mNextButton;
 
     private Question[] mQuestions = new Question[] {
             new Question(R.string.question_africa, false),
@@ -58,7 +58,7 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         // Button: Previous
-        mPreviousButton = (Button) findViewById(R.id.previous_button);
+        mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +73,7 @@ public class QuizActivity extends AppCompatActivity {
         });
 
         // Button: Next
-        mNextButton = (Button) findViewById(R.id.next_button);
+        mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(nextQuestion);
     }
 
