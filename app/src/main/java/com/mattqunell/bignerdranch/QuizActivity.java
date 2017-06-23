@@ -55,6 +55,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
+                mTrueButton.setEnabled(false);
             }
         });
 
@@ -64,6 +65,7 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
+                mFalseButton.setEnabled(false);
             }
         });
 
@@ -79,6 +81,7 @@ public class QuizActivity extends AppCompatActivity {
                 }
 
                 updateQuestion();
+                setButtonsEnabled(true);
             }
         });
 
@@ -97,9 +100,13 @@ public class QuizActivity extends AppCompatActivity {
 
     // Checks if the user guessed correctly or not
     private void checkAnswer(boolean userPressedTrue) {
-        int resultId = R.string.correct_toast;
+        int resultId;
 
-        if (userPressedTrue != mQuestions[mCurrentIndex].isAnswerTrue()) {
+        if (userPressedTrue == mQuestions[mCurrentIndex].isAnswerTrue()) {
+            resultId = R.string.correct_toast;
+            setButtonsEnabled(false);
+        }
+        else {
             resultId = R.string.incorrect_toast;
         }
 
@@ -112,12 +119,19 @@ public class QuizActivity extends AppCompatActivity {
         mQuestionTextview.setText(questionId);
     }
 
+    // Sets mTrueButton and mFalseButtons' enabled status
+    private void setButtonsEnabled(boolean status) {
+        mTrueButton.setEnabled(status);
+        mFalseButton.setEnabled(status);
+    }
+
     // Private inner class used for mQuestionTextview and mNextButton's onClick listeners
     private class NextQuestion implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
             updateQuestion();
+            setButtonsEnabled(true);
         }
     }
 }
