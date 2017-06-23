@@ -2,6 +2,7 @@ package com.mattqunell.bignerdranch;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -9,6 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
+
+    private static final String TAG = "QuizActivity";
+    private static final String KEY_INDEX = "index";
 
     private TextView mQuestionTextview;
     private Button mTrueButton;
@@ -30,7 +34,13 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
+
+        if (savedInstanceState != null) {
+            // mCurrentIndex = KEY_INDEX's value, or 0 if it doesn't have one
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+        }
 
         View.OnClickListener nextQuestion = new NextQuestion();
 
@@ -77,10 +87,12 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton.setOnClickListener(nextQuestion);
     }
 
-    // Sets mQuestionTextView to the current question
-    private void updateQuestion() {
-        int questionId = mQuestions[mCurrentIndex].getTextResId();
-        mQuestionTextview.setText(questionId);
+    // Add mCurrentIndex to the savedInstanceState Bundle
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Log.v(TAG, "onSaveInstanceState(Bundle)");
+        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
     // Checks if the user guessed correctly or not
@@ -92,6 +104,12 @@ public class QuizActivity extends AppCompatActivity {
         }
 
         Toast.makeText(QuizActivity.this, resultId, Toast.LENGTH_SHORT).show();
+    }
+
+    // Sets mQuestionTextView to the current question
+    private void updateQuestion() {
+        int questionId = mQuestions[mCurrentIndex].getTextResId();
+        mQuestionTextview.setText(questionId);
     }
 
     // Private inner class used for mQuestionTextview and mNextButton's onClick listeners
