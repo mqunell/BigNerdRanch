@@ -7,10 +7,12 @@ class Question {
 
     private int mTextResId;
     private boolean mAnswerTrue;
+    private boolean mAnswered;
 
     Question(int textResId, boolean answerTrue) {
         mTextResId = textResId;
         mAnswerTrue = answerTrue;
+        mAnswered = false;
     }
 
     int getTextResId() {
@@ -19,5 +21,13 @@ class Question {
 
     boolean isAnswerTrue() {
         return mAnswerTrue;
+    }
+
+    boolean isAnswered() {
+        return mAnswered;
+    }
+
+    void setAnswered(Boolean answered) {
+        mAnswered = answered;
     }
 }

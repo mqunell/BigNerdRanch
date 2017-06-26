@@ -30,6 +30,8 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private int mGuessed = 0;
+    private int mScore = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +44,12 @@ public class QuizActivity extends AppCompatActivity {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
 
+        // V.OCL (from the inner NextQuestion class) to use for "next" functionality
         View.OnClickListener nextQuestion = new NextQuestion();
 
         // TextView: Question
         mQuestionTextview = (TextView) findViewById(R.id.question_textview);
         mQuestionTextview.setOnClickListener(nextQuestion);
-        updateQuestion();
 
         // Button: True
         mTrueButton = (Button) findViewById(R.id.true_button);
@@ -55,7 +57,6 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
-                mTrueButton.setEnabled(false);
             }
         });
 
@@ -65,7 +66,6 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
-                mFalseButton.setEnabled(false);
             }
         });
 
@@ -81,13 +81,15 @@ public class QuizActivity extends AppCompatActivity {
                 }
 
                 updateQuestion();
-                setButtonsEnabled(true);
             }
         });
 
         // Button: Next
         mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(nextQuestion);
+
+
+        updateQuestion();
     }
 
     // Add mCurrentIndex to the savedInstanceState Bundle
@@ -98,25 +100,57 @@ public class QuizActivity extends AppCompatActivity {
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
-    // Checks if the user guessed correctly or not
+    // Checks if the user guessed correctly or not, and if all Questions have been guessed
     private void checkAnswer(boolean userPressedTrue) {
+        // The String id to be used for the correct/incorrect Toast
         int resultId;
 
         if (userPressedTrue == mQuestions[mCurrentIndex].isAnswerTrue()) {
             resultId = R.string.correct_toast;
-            setButtonsEnabled(false);
+            mScore++;
         }
         else {
             resultId = R.string.incorrect_toast;
         }
 
         Toast.makeText(QuizActivity.this, resultId, Toast.LENGTH_SHORT).show();
+
+        // Increment mGuessed, set this Question's mAnswered to true, and disable true/false Buttons
+        mGuessed++;
+        mQuestions[mCurrentIndex].setAnswered(true);
+        setButtonsEnabled(false);
+
+        // Check if all questions have been guessed
+        if (mGuessed == mQuestions.length) {
+            endGame();
+        }
     }
 
-    // Sets mQuestionTextView to the current question
+    // Displays the final score and disables all functionality
+    private void endGame() {
+        // Update mQuestionTextview with the final results
+        String results = "Questions guessed correctly: " + mScore + " / " + mGuessed;
+        mQuestionTextview.setText(results);
+
+        // Disable the next/previous Buttons and make mQuestionTextview not clickable
+        mNextButton.setEnabled(false);
+        mPreviousButton.setEnabled(false);
+        mQuestionTextview.setClickable(false);
+    }
+
+    // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
     private void updateQuestion() {
+        // Sets mQuestionTextView to the current question
         int questionId = mQuestions[mCurrentIndex].getTextResId();
         mQuestionTextview.setText(questionId);
+
+        // Enable buttons if not answered, disable buttons if answered
+        if (mQuestions[mCurrentIndex].isAnswered()) {
+            setButtonsEnabled(false);
+        }
+        else {
+            setButtonsEnabled(true);
+        }
     }
 
     // Sets mTrueButton and mFalseButtons' enabled status
@@ -131,7 +165,6 @@ public class QuizActivity extends AppCompatActivity {
         public void onClick(View v) {
             mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
             updateQuestion();
-            setButtonsEnabled(true);
         }
     }
 }
