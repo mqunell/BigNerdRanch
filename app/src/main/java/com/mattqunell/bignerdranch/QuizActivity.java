@@ -74,13 +74,7 @@ public class QuizActivity extends AppCompatActivity {
         mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Java's % is "remainder", not "mod", so manually wrap around if index = -1
-                mCurrentIndex -= 1;
-                if (mCurrentIndex == -1) {
-                    mCurrentIndex = mQuestions.length - 1;
-                }
-
-                updateQuestion();
+                previousQuestion();
             }
         });
 
@@ -88,7 +82,7 @@ public class QuizActivity extends AppCompatActivity {
         mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(nextQuestion);
 
-
+        // Set the current question (has to be done after creating elements)
         updateQuestion();
     }
 
@@ -98,6 +92,21 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.v(TAG, "onSaveInstanceState(Bundle)");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+    }
+
+    // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
+    private void updateQuestion() {
+        // Sets mQuestionTextView to the current question
+        int questionId = mQuestions[mCurrentIndex].getTextResId();
+        mQuestionTextview.setText(questionId);
+
+        // Enable buttons if not answered, disable buttons if answered
+        if (mQuestions[mCurrentIndex].isAnswered()) {
+            setButtonsEnabled(false);
+        }
+        else {
+            setButtonsEnabled(true);
+        }
     }
 
     // Checks if the user guessed correctly or not, and if all Questions have been guessed
@@ -138,28 +147,24 @@ public class QuizActivity extends AppCompatActivity {
         mQuestionTextview.setClickable(false);
     }
 
-    // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
-    private void updateQuestion() {
-        // Sets mQuestionTextView to the current question
-        int questionId = mQuestions[mCurrentIndex].getTextResId();
-        mQuestionTextview.setText(questionId);
-
-        // Enable buttons if not answered, disable buttons if answered
-        if (mQuestions[mCurrentIndex].isAnswered()) {
-            setButtonsEnabled(false);
-        }
-        else {
-            setButtonsEnabled(true);
-        }
-    }
-
     // Sets mTrueButton and mFalseButtons' enabled status
     private void setButtonsEnabled(boolean status) {
         mTrueButton.setEnabled(status);
         mFalseButton.setEnabled(status);
     }
 
-    // Private inner class used for mQuestionTextview and mNextButton's onClick listeners
+    // "Previous" functionality
+    private void previousQuestion() {
+        // Java's % is "remainder", not "mod", so manually wrap around if index = -1
+        mCurrentIndex -= 1;
+        if (mCurrentIndex == -1) {
+            mCurrentIndex = mQuestions.length - 1;
+        }
+
+        updateQuestion();
+    }
+
+    // Private inner class used for "Next" functionality
     private class NextQuestion implements View.OnClickListener {
         @Override
         public void onClick(View v) {
