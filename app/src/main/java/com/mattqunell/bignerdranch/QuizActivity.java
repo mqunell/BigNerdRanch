@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
+    // Tag for logging, key for bundles
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
 
+    // UI elements
     private TextView mQuestionTextview;
     private Button mTrueButton;
     private Button mFalseButton;
@@ -22,6 +24,7 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mPreviousButton;
     private ImageButton mNextButton;
 
+    // Question array
     private Question[] mQuestions = new Question[] {
             new Question(R.string.question_africa, false),
             new Question(R.string.question_americas, true),
@@ -31,6 +34,7 @@ public class QuizActivity extends AppCompatActivity {
             new Question(R.string.question_oceans, true)
     };
 
+    // Variables for playing through the quiz
     private int mCurrentIndex = 0;
     private int mGuessed = 0;
     private int mScore = 0;
@@ -76,7 +80,9 @@ public class QuizActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(QuizActivity.this, CheatActivity.class));
+                boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
+                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivity(intent);
             }
         });
 
