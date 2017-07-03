@@ -5,8 +5,8 @@ package com.mattqunell.bignerdranch;
 
 class Question {
 
-    private int mTextResId;
-    private boolean mAnswerTrue;
+    private final int mTextResId;
+    private final boolean mAnswerTrue;
     private boolean mAnswered;
 
     Question(int textResId, boolean answerTrue) {

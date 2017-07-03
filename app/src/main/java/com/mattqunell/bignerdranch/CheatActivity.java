@@ -15,8 +15,8 @@ public class CheatActivity extends AppCompatActivity {
     private boolean mAnswerIsTrue;
 
     // UI elements
-    TextView mAnswerTextview;
-    Button mShowAnswerButton;
+    private TextView mAnswerTextview;
+    private Button mShowAnswerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

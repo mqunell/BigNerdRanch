@@ -25,7 +25,7 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mNextButton;
 
     // Question array
-    private Question[] mQuestions = new Question[] {
+    private final Question[] mQuestions = new Question[] {
             new Question(R.string.question_africa, false),
             new Question(R.string.question_americas, true),
             new Question(R.string.question_asia, true),
