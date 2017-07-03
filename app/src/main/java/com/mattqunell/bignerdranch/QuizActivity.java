@@ -50,8 +50,13 @@ public class QuizActivity extends AppCompatActivity {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
         }
 
-        // V.OCL (from the inner NextQuestion class) to use for "next" functionality
-        View.OnClickListener nextQuestion = new NextQuestion();
+        // V.OCL for elements that have "next" functionality
+        View.OnClickListener nextQuestion = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nextQuestion();
+            }
+        };
 
         // TextView: Question
         mQuestionTextview = (TextView) findViewById(R.id.question_textview);
@@ -80,9 +85,7 @@ public class QuizActivity extends AppCompatActivity {
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
-                Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
-                startActivity(intent);
+                cheat();
             }
         });
 
@@ -170,6 +173,16 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setEnabled(status);
     }
 
+    // "Cheat" functionality
+    private void cheat() {
+        // Normal Intent: startActivity(new Intent(QuizActivity.this, CheatActivity.class));
+
+        // Start CheatActivity using it's specialized Intent method
+        boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
+        Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+        startActivity(intent);
+    }
+
     // "Previous" functionality
     private void previousQuestion() {
         // Java's % is "remainder", not "mod", so manually wrap around if index = -1
@@ -181,12 +194,9 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestion();
     }
 
-    // Private inner class used for "Next" functionality
-    private class NextQuestion implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
-            updateQuestion();
-        }
+    // "Next" functionality
+    private void nextQuestion() {
+        mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
+        updateQuestion();
     }
 }

@@ -33,7 +33,7 @@ public class CheatActivity extends AppCompatActivity {
         mShowAnswerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAnswerTextview.setText(String.valueOf(mAnswerIsTrue));
+                showAnswer();
             }
         });
     }
@@ -43,5 +43,9 @@ public class CheatActivity extends AppCompatActivity {
         Intent intent = new Intent(packageContext, CheatActivity.class);
         intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
         return intent;
+    }
+
+    private void showAnswer() {
+        mAnswerTextview.setText(String.valueOf(mAnswerIsTrue));
     }
 }
