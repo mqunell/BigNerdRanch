@@ -171,6 +171,7 @@ public class QuizActivity extends AppCompatActivity {
     private void setButtonsEnabled(boolean status) {
         mTrueButton.setEnabled(status);
         mFalseButton.setEnabled(status);
+        mCheatButton.setEnabled(status);
     }
 
     // "Cheat" functionality

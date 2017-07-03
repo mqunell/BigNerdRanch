@@ -45,7 +45,13 @@ public class CheatActivity extends AppCompatActivity {
         return intent;
     }
 
+    // Set mAnswerTextView to the correct answer
     private void showAnswer() {
-        mAnswerTextview.setText(String.valueOf(mAnswerIsTrue));
+        if (mAnswerIsTrue) {
+            mAnswerTextview.setText(R.string.true_button);
+        }
+        else {
+            mAnswerTextview.setText(R.string.false_button);
+        }
     }
 }
