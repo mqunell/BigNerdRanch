@@ -40,7 +40,6 @@ public class QuizActivity extends AppCompatActivity {
     private int mCurrentIndex = 0;
     private int mGuessed = 0;
     private int mScore = 0;
-    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +111,13 @@ public class QuizActivity extends AppCompatActivity {
     // Determines whether or not the user cheated
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*
+         * Due to how CheatActivity sends data back, if the user clicks the cheat button but not the
+         * show answer button, no data is sent back. In that case, this method stops at the first if
+         * statement and nothing happens. The commented Log does not show false if the show answer
+         * button is not clicked, which means the following if statement is not actually necessary.
+         */
+
         if (resultCode != Activity.RESULT_OK) {
             return;
         }
@@ -120,7 +126,12 @@ public class QuizActivity extends AppCompatActivity {
             if (data == null) {
                 return;
             }
-            mIsCheater = CheatActivity.wasAnswerShown(data);
+
+            //Log.d(TAG, String.valueOf(CheatActivity.wasAnswerShown(data)));
+
+            if (CheatActivity.wasAnswerShown(data)) {
+                mQuestions[mCurrentIndex].setCheated();
+            }
         }
     }
 
@@ -133,20 +144,18 @@ public class QuizActivity extends AppCompatActivity {
 
     // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
     private void updateQuestion() {
+        Question currentQuestion = mQuestions[mCurrentIndex];
+
         // Sets mQuestionTextView to the current question
-        int questionId = mQuestions[mCurrentIndex].getTextResId();
-        mQuestionTextview.setText(questionId);
+        mQuestionTextview.setText(currentQuestion.getTextResId());
 
         // Enable buttons if not answered, disable buttons if answered
-        if (mQuestions[mCurrentIndex].isAnswered()) {
+        if (currentQuestion.isAnswered()) {
             setButtonsEnabled(false);
         }
         else {
             setButtonsEnabled(true);
         }
-
-        // Reset mIsCheater
-        mIsCheater = false;
     }
 
     // Checks if the user cheated/guessed correctly and if all Questions have been guessed
@@ -158,7 +167,7 @@ public class QuizActivity extends AppCompatActivity {
          * Note: This format does not give the user a point if they cheat, regardless of whether or
          * not they proceeded to choose the correct answer.
          */
-        if (mIsCheater) {
+        if (mQuestions[mCurrentIndex].isCheated()) {
             resultId = R.string.judgment_toast;
         }
         else {
@@ -175,7 +184,7 @@ public class QuizActivity extends AppCompatActivity {
 
         // Increment mGuessed, set this Question's mAnswered to true, and disable true/false Buttons
         mGuessed++;
-        mQuestions[mCurrentIndex].setAnswered(true);
+        mQuestions[mCurrentIndex].setAnswered();
         setButtonsEnabled(false);
 
         // Check if all questions have been guessed
