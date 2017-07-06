@@ -1,5 +1,6 @@
 package com.mattqunell.bignerdranch;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,9 +13,10 @@ import android.widget.Toast;
 
 public class QuizActivity extends AppCompatActivity {
 
-    // Tag for logging, key for bundles
+    // Tag for logging, key for bundles, request code for child activity
     private static final String TAG = "QuizActivity";
     private static final String KEY_INDEX = "index";
+    private static final int REQUEST_CODE_CHEAT = 0;
 
     // UI elements
     private TextView mQuestionTextview;
@@ -38,6 +40,7 @@ public class QuizActivity extends AppCompatActivity {
     private int mCurrentIndex = 0;
     private int mGuessed = 0;
     private int mScore = 0;
+    private boolean mIsCheater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +109,25 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestion();
     }
 
+    // Determines whether or not the user cheated
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == REQUEST_CODE_CHEAT) {
+            if (data == null) {
+                return;
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
+    }
+
     // Add mCurrentIndex to the savedInstanceState Bundle
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.v(TAG, "onSaveInstanceState(Bundle)");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
@@ -127,19 +144,31 @@ public class QuizActivity extends AppCompatActivity {
         else {
             setButtonsEnabled(true);
         }
+
+        // Reset mIsCheater
+        mIsCheater = false;
     }
 
-    // Checks if the user guessed correctly or not, and if all Questions have been guessed
+    // Checks if the user cheated/guessed correctly and if all Questions have been guessed
     private void checkAnswer(boolean userPressedTrue) {
         // The String id to be used for the correct/incorrect Toast
         int resultId;
 
-        if (userPressedTrue == mQuestions[mCurrentIndex].isAnswerTrue()) {
-            resultId = R.string.correct_toast;
-            mScore++;
+        /*
+         * Note: This format does not give the user a point if they cheat, regardless of whether or
+         * not they proceeded to choose the correct answer.
+         */
+        if (mIsCheater) {
+            resultId = R.string.judgment_toast;
         }
         else {
-            resultId = R.string.incorrect_toast;
+            // If the user chose the correct answer
+            if (userPressedTrue == mQuestions[mCurrentIndex].isAnswerTrue()) {
+                resultId = R.string.correct_toast;
+                mScore++;
+            } else {
+                resultId = R.string.incorrect_toast;
+            }
         }
 
         Toast.makeText(QuizActivity.this, resultId, Toast.LENGTH_SHORT).show();
@@ -178,10 +207,10 @@ public class QuizActivity extends AppCompatActivity {
     private void cheat() {
         // Normal Intent: startActivity(new Intent(QuizActivity.this, CheatActivity.class));
 
-        // Start CheatActivity using it's specialized Intent method
+        // Start CheatActivity using its encapsulated Intent method
         boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_CHEAT);
     }
 
     // "Previous" functionality

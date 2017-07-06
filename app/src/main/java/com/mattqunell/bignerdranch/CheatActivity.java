@@ -10,13 +10,28 @@ import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
-    // Tag for Intent extras, variable for storing it
+    // Tags for Intent extras (in: E_A_IS_TRUE, out: E_A_SHOWN)
     private static final String EXTRA_ANSWER_IS_TRUE = "com.mattqunell.bignerdranch.answer_is_true";
+    private static final String EXTRA_ANSWER_SHOWN = "com.mattqunell.bignerdranch.answer_shown";
+
+    // Boolean for storing the Intent extra
     private boolean mAnswerIsTrue;
 
     // UI elements
     private TextView mAnswerTextview;
     private Button mShowAnswerButton;
+
+    // Encapsulates the implementation details of what CheatActivity expects as extras on its Intent
+    public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
+        Intent intent = new Intent(packageContext, CheatActivity.class);
+        intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+        return intent;
+    }
+
+    // Encapsulates the implementation details of CheatActivity's returned Intent
+    public static boolean wasAnswerShown(Intent result) {
+        return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +53,6 @@ public class CheatActivity extends AppCompatActivity {
         });
     }
 
-    // Encapsulates the implementation details of what CheatActivity expects as extras on its Intent
-    public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
-        Intent intent = new Intent(packageContext, CheatActivity.class);
-        intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
-        return intent;
-    }
-
     // Set mAnswerTextView to the correct answer
     private void showAnswer() {
         if (mAnswerIsTrue) {
@@ -53,5 +61,17 @@ public class CheatActivity extends AppCompatActivity {
         else {
             mAnswerTextview.setText(R.string.false_button);
         }
+
+        setAnswerShownResult(true);
+    }
+
+    // Send data back to the parent activity
+    private void setAnswerShownResult(boolean isAnswerShown) {
+        // Create a new Intent with a boolean extra (for whether the answer was shown)
+        Intent data = new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+
+        // Send the Intent back to the parent activity
+        setResult(RESULT_OK, data);
     }
 }
