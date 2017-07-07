@@ -112,23 +112,21 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         /*
-         * Due to how CheatActivity sends data back, if the user clicks the cheat button but not the
-         * show answer button, no data is sent back. In that case, this method stops at the first if
-         * statement and nothing happens. The commented Log does not show false if the show answer
-         * button is not clicked, which means the following if statement is not actually necessary.
+         * Since only one Activity is sending data back, requestCode always == REQUEST_CODE_CHEAT
+         *
+         * If the user clicks "Cheat!", but does not click "Show Answer":
+         *     resultCode != Activity.RESULT_OK
+         *     data == null
+         *
+         * If the user clicks both buttons:
+         *     resultCode == Activity.RESULT_OK
+         *     data != null
+         *
+         * This means the inner if statement is currently unnecessary, because it will never be
+         * reached if the answer was not shown.
          */
 
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-
-        if (requestCode == REQUEST_CODE_CHEAT) {
-            if (data == null) {
-                return;
-            }
-
-            //Log.d(TAG, String.valueOf(CheatActivity.wasAnswerShown(data)));
-
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHEAT && data != null) {
             if (CheatActivity.wasAnswerShown(data)) {
                 mQuestions[mCurrentIndex].setCheated();
             }
