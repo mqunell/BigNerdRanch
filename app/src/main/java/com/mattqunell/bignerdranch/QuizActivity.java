@@ -14,8 +14,8 @@ import android.widget.Toast;
 public class QuizActivity extends AppCompatActivity {
 
     // Tag for logging, key for bundles, request code for child activity
-    private static final String TAG = "QuizActivity";
-    private static final String KEY_INDEX = "index";
+    private static final String LOG_TAG = "QuizActivity";
+    private static final String BUNDLE_KEY_INDEX = "index";
     private static final int REQUEST_CODE_CHEAT = 0;
 
     // UI elements
@@ -44,12 +44,11 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
 
         if (savedInstanceState != null) {
             // mCurrentIndex = KEY_INDEX's value, or 0 if it doesn't have one
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mCurrentIndex = savedInstanceState.getInt(BUNDLE_KEY_INDEX, 0);
         }
 
         // V.OCL for elements that have "next" functionality
@@ -108,6 +107,13 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestion();
     }
 
+    // Add mCurrentIndex to the savedInstanceState Bundle
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt(BUNDLE_KEY_INDEX, mCurrentIndex);
+    }
+
     // Determines whether or not the user cheated
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -124,13 +130,6 @@ public class QuizActivity extends AppCompatActivity {
                 Toast.makeText(QuizActivity.this, R.string.wise_toast, Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    // Add mCurrentIndex to the savedInstanceState Bundle
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
     }
 
     // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
@@ -205,8 +204,6 @@ public class QuizActivity extends AppCompatActivity {
 
     // "Cheat" functionality
     private void cheat() {
-        // Normal Intent: startActivity(new Intent(QuizActivity.this, CheatActivity.class));
-
         // Start CheatActivity using its encapsulated Intent method
         boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
         Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);

@@ -1,7 +1,9 @@
 package com.mattqunell.bignerdranch;
 
-// The lack of public/protected/private modifiers makes these methods "package-private" which allows
-// access from package classes but not subclasses or world
+/*
+ * The lack of public/protected/private modifiers makes these methods "package-private" which allows
+ * access from package classes, but not subclasses or world
+ */
 
 class Question {
 

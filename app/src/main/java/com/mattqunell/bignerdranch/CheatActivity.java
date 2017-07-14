@@ -4,13 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
-    // Tags for Intent extras (in: E_A_IS_TRUE, out: E_A_SHOWN)
+    // Tags for Logging and Intent extras (in: E_A_IS_TRUE, out: E_A_SHOWN)
+    private static final String LOG_TAG = "CheatActivity";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.mattqunell.bignerdranch.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.mattqunell.bignerdranch.answer_shown";
 
