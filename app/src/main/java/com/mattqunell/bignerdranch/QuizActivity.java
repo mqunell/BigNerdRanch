@@ -112,23 +112,16 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         /*
-         * Since only one Activity is sending data back, requestCode always == REQUEST_CODE_CHEAT
-         *
-         * If the user clicks "Cheat!", but does not click "Show Answer":
-         *     resultCode != Activity.RESULT_OK
-         *     data == null
-         *
-         * If the user clicks both buttons:
-         *     resultCode == Activity.RESULT_OK
-         *     data != null
-         *
-         * This means the inner if statement is currently unnecessary, because it will never be
-         * reached if the answer was not shown.
+         * Currently, the outer if statement is always entered and therefore not actually necessary.
+         * It was left in the code for thoroughness and to be built upon.
          */
 
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHEAT && data != null) {
             if (CheatActivity.wasAnswerShown(data)) {
                 mQuestions[mCurrentIndex].setCheated();
+            }
+            else {
+                Toast.makeText(QuizActivity.this, R.string.wise_toast, Toast.LENGTH_SHORT).show();
             }
         }
     }

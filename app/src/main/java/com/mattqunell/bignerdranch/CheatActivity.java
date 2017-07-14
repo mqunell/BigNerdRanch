@@ -14,7 +14,8 @@ public class CheatActivity extends AppCompatActivity {
     private static final String EXTRA_ANSWER_IS_TRUE = "com.mattqunell.bignerdranch.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.mattqunell.bignerdranch.answer_shown";
 
-    // Boolean for storing the Intent extra
+    // Booleans for whether cheating occurred and storing the Intent extra
+    private boolean mCheated = false;
     private boolean mAnswerIsTrue;
 
     // UI elements
@@ -53,8 +54,20 @@ public class CheatActivity extends AppCompatActivity {
         });
     }
 
+    // Calls setAnswerShownResult when the user goes back, if they did not cheat
+    @Override
+    public void onBackPressed() {
+        if (!mCheated) {
+            setAnswerShownResult(false);
+        }
+
+        super.onBackPressed();
+    }
+
     // Set mAnswerTextView to the correct answer
     private void showAnswer() {
+        mCheated = true;
+
         if (mAnswerIsTrue) {
             mAnswerTextview.setText(R.string.true_button);
         }
