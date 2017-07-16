@@ -27,6 +27,7 @@ public class CheatActivity extends AppCompatActivity {
     // UI elements
     private TextView mAnswerTextview;
     private Button mShowAnswerButton;
+    private TextView mApiTextview;
 
     // Encapsulates the implementation details of what CheatActivity expects as extras on its Intent
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
@@ -58,6 +59,9 @@ public class CheatActivity extends AppCompatActivity {
                 showAnswer();
             }
         });
+
+        mApiTextview = (TextView) findViewById(R.id.api_level_textview);
+        mApiTextview.setText(getString(R.string.api_level, Build.VERSION.SDK_INT));
     }
 
     // Calls setAnswerShownResult when the user goes back, if they did not cheat
