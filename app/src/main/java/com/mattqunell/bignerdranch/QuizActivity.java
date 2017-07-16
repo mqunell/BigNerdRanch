@@ -40,6 +40,8 @@ public class QuizActivity extends AppCompatActivity {
     private int mCurrentIndex = 0;
     private int mGuessed = 0;
     private int mScore = 0;
+    private final int MAX_CHEATS = 3;
+    private int mCheats = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +85,7 @@ public class QuizActivity extends AppCompatActivity {
 
         // Button: Cheat
         mCheatButton = (Button) findViewById(R.id.cheat_button);
+        mCheatButton.setText(getString(R.string.cheat_button, MAX_CHEATS - mCheats, MAX_CHEATS));
         mCheatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,9 +125,20 @@ public class QuizActivity extends AppCompatActivity {
          * It was left in the code for thoroughness and to be built upon.
          */
 
+        // If the user pressed "Cheat!"
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHEAT && data != null) {
+
+            // If the user pressed "Show Answer"
             if (CheatActivity.wasAnswerShown(data)) {
                 mQuestions[mCurrentIndex].setCheated();
+
+                // Increment mCheats, update mCheatButton's text, disable mCheatButton if necessary
+                mCheats++;
+                mCheatButton.setText(getString(R.string.cheat_button, MAX_CHEATS - mCheats,
+                        MAX_CHEATS));
+                if (mCheats >= MAX_CHEATS) {
+                    mCheatButton.setEnabled(false);
+                }
             }
             else {
                 Toast.makeText(QuizActivity.this, R.string.wise_toast, Toast.LENGTH_SHORT).show();
@@ -199,7 +213,14 @@ public class QuizActivity extends AppCompatActivity {
     private void setButtonsEnabled(boolean status) {
         mTrueButton.setEnabled(status);
         mFalseButton.setEnabled(status);
-        mCheatButton.setEnabled(status);
+
+        // If all cheats are used, disable mCheatButton
+        if (mCheats >= MAX_CHEATS) {
+            mCheatButton.setEnabled(false);
+        }
+        else {
+            mCheatButton.setEnabled(status);
+        }
     }
 
     // "Cheat" functionality
