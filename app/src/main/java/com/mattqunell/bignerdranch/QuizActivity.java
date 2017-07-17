@@ -227,7 +227,8 @@ public class QuizActivity extends AppCompatActivity {
     private void cheat() {
         // Start CheatActivity using its encapsulated Intent method
         boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
-        Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+        boolean alreadyShown = mQuestions[mCurrentIndex].isCheated();
+        Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue, alreadyShown);
         startActivityForResult(intent, REQUEST_CODE_CHEAT);
     }
 

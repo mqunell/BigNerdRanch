@@ -15,14 +15,16 @@ import android.widget.TextView;
 
 public class CheatActivity extends AppCompatActivity {
 
-    // Tags for Logging and Intent extras (in: E_A_IS_TRUE, out: E_A_SHOWN)
+    // Tags for Logging and Intent extras (in, in, out)
     private static final String LOG_TAG = "CheatActivity";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.mattqunell.bignerdranch.answer_is_true";
+    private static final String EXTRA_ALREADY_SHOWN = "com.mattqunell.bignerdranch.already_shown";
     private static final String EXTRA_ANSWER_SHOWN = "com.mattqunell.bignerdranch.answer_shown";
 
-    // Booleans for whether cheating occurred and storing the Intent extra
-    private boolean mCheated = false;
+    // Booleans for storing the Intent extras and whether cheating occurs
     private boolean mAnswerIsTrue;
+    private boolean mAlreadyShown;
+    private boolean mCheated = false;
 
     // UI elements
     private TextView mAnswerTextview;
@@ -30,9 +32,10 @@ public class CheatActivity extends AppCompatActivity {
     private TextView mApiTextview;
 
     // Encapsulates the implementation details of what CheatActivity expects as extras on its Intent
-    public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
-        Intent intent = new Intent(packageContext, CheatActivity.class);
+    public static Intent newIntent(Context context, boolean answerIsTrue, boolean alreadyShown) {
+        Intent intent = new Intent(context, CheatActivity.class);
         intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
+        intent.putExtra(EXTRA_ALREADY_SHOWN, alreadyShown);
         return intent;
     }
 
@@ -46,9 +49,12 @@ public class CheatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cheat);
 
-        // getIntent() returns the Intent that started the activity
-        // getBooleanExtra(<key name>, <default value if not found>)
+        /*
+         * getIntent() returns the Intent that started the activity
+         * getBooleanExtra(<key name>, <default value if not found>)
+         */
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
+        mAlreadyShown = getIntent().getBooleanExtra(EXTRA_ALREADY_SHOWN, false);
 
         mAnswerTextview = (TextView) findViewById(R.id.answer_textview);
 
@@ -62,12 +68,24 @@ public class CheatActivity extends AppCompatActivity {
 
         mApiTextview = (TextView) findViewById(R.id.api_level_textview);
         mApiTextview.setText(getString(R.string.api_level, Build.VERSION.SDK_INT));
+
+        // If the answer was already shown
+        if (mAlreadyShown) {
+            if (mAnswerIsTrue) {
+                mAnswerTextview.setText(R.string.true_button);
+            }
+            else {
+                mAnswerTextview.setText(R.string.false_button);
+            }
+
+            mShowAnswerButton.setVisibility(View.INVISIBLE);
+        }
     }
 
     // Calls setAnswerShownResult when the user goes back, if they did not cheat
     @Override
     public void onBackPressed() {
-        if (!mCheated) {
+        if (!mCheated && !mAlreadyShown) {
             setAnswerShownResult(false);
         }
 
