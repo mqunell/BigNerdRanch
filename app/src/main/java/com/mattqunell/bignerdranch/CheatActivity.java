@@ -18,13 +18,13 @@ public class CheatActivity extends AppCompatActivity {
     // Tags for Logging and Intent extras (in, in, out)
     private static final String LOG_TAG = "CheatActivity";
     private static final String EXTRA_ANSWER_IS_TRUE = "com.mattqunell.bignerdranch.answer_is_true";
-    private static final String EXTRA_ALREADY_SHOWN = "com.mattqunell.bignerdranch.already_shown";
-    private static final String EXTRA_ANSWER_SHOWN = "com.mattqunell.bignerdranch.answer_shown";
+    private static final String EXTRA_CHEATED_BEFORE = "com.mattqunell.bignerdranch.cheated_before";
+    private static final String EXTRA_CHEATED_NOW = "com.mattqunell.bignerdranch.cheated_now";
 
     // Booleans for storing the Intent extras and whether cheating occurs
     private boolean mAnswerIsTrue;
-    private boolean mAlreadyShown;
-    private boolean mCheated = false;
+    private boolean mCheatedBefore;
+    private boolean mCheatedNow = false;
 
     // UI elements
     private TextView mAnswerTextview;
@@ -32,16 +32,16 @@ public class CheatActivity extends AppCompatActivity {
     private TextView mApiTextview;
 
     // Encapsulates the implementation details of what CheatActivity expects as extras on its Intent
-    public static Intent newIntent(Context context, boolean answerIsTrue, boolean alreadyShown) {
+    public static Intent newIntent(Context context, boolean answerIsTrue, boolean cheatedBefore) {
         Intent intent = new Intent(context, CheatActivity.class);
         intent.putExtra(EXTRA_ANSWER_IS_TRUE, answerIsTrue);
-        intent.putExtra(EXTRA_ALREADY_SHOWN, alreadyShown);
+        intent.putExtra(EXTRA_CHEATED_BEFORE, cheatedBefore);
         return intent;
     }
 
     // Encapsulates the implementation details of CheatActivity's returned Intent
     public static boolean wasAnswerShown(Intent result) {
-        return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
+        return result.getBooleanExtra(EXTRA_CHEATED_NOW, false);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CheatActivity extends AppCompatActivity {
          * getBooleanExtra(<key name>, <default value if not found>)
          */
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
-        mAlreadyShown = getIntent().getBooleanExtra(EXTRA_ALREADY_SHOWN, false);
+        mCheatedBefore = getIntent().getBooleanExtra(EXTRA_CHEATED_BEFORE, false);
 
         mAnswerTextview = (TextView) findViewById(R.id.answer_textview);
 
@@ -69,8 +69,8 @@ public class CheatActivity extends AppCompatActivity {
         mApiTextview = (TextView) findViewById(R.id.api_level_textview);
         mApiTextview.setText(getString(R.string.api_level, Build.VERSION.SDK_INT));
 
-        // If the answer was already shown
-        if (mAlreadyShown) {
+        // If the user already cheated on this question
+        if (mCheatedBefore) {
             displayAnswer();
             hideButton(false);
         }
@@ -79,7 +79,7 @@ public class CheatActivity extends AppCompatActivity {
     // Calls setAnswerShownResult when the user goes back, if they did not cheat
     @Override
     public void onBackPressed() {
-        if (!mCheated && !mAlreadyShown) {
+        if (!mCheatedBefore && !mCheatedNow) {
             setAnswerShownResult(false);
         }
 
@@ -87,10 +87,10 @@ public class CheatActivity extends AppCompatActivity {
     }
 
     // Sends data back to the parent activity
-    private void setAnswerShownResult(boolean isAnswerShown) {
-        // Create a new Intent with a boolean extra (for whether the answer was shown)
+    private void setAnswerShownResult(boolean buttonPressed) {
+        // Create a new Intent with a boolean extra (for whether "Show Answer" was pressed)
         Intent data = new Intent();
-        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        data.putExtra(EXTRA_CHEATED_NOW, buttonPressed);
 
         // Send the Intent back to the parent activity
         setResult(RESULT_OK, data);
@@ -98,7 +98,7 @@ public class CheatActivity extends AppCompatActivity {
 
     // "Show Answer" button method
     private void showAnswer() {
-        mCheated = true;
+        mCheatedNow = true;
 
         displayAnswer();
         hideButton(true);
