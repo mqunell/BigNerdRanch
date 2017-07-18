@@ -71,14 +71,8 @@ public class CheatActivity extends AppCompatActivity {
 
         // If the answer was already shown
         if (mAlreadyShown) {
-            if (mAnswerIsTrue) {
-                mAnswerTextview.setText(R.string.true_button);
-            }
-            else {
-                mAnswerTextview.setText(R.string.false_button);
-            }
-
-            mShowAnswerButton.setVisibility(View.INVISIBLE);
+            displayAnswer();
+            hideButton(false);
         }
     }
 
@@ -92,27 +86,47 @@ public class CheatActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    // Set mAnswerTextView to the correct answer
+    // Sends data back to the parent activity
+    private void setAnswerShownResult(boolean isAnswerShown) {
+        // Create a new Intent with a boolean extra (for whether the answer was shown)
+        Intent data = new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+
+        // Send the Intent back to the parent activity
+        setResult(RESULT_OK, data);
+    }
+
+    // "Show Answer" button method
     private void showAnswer() {
         mCheated = true;
 
+        displayAnswer();
+        hideButton(true);
+
+        setAnswerShownResult(true);
+    }
+
+    // Displays the answer in the TextView
+    private void displayAnswer() {
         if (mAnswerIsTrue) {
             mAnswerTextview.setText(R.string.true_button);
         }
         else {
             mAnswerTextview.setText(R.string.false_button);
         }
+    }
 
-        setAnswerShownResult(true);
-
-        // If the device's version is >= Lollipop
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    // Hides the button with/without animation
+    private void hideButton(boolean withAnimation) {
+        // If the button should be animated and the device's version is >= Lollipop
+        if (withAnimation && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             // Animation that makes mShowAnswerButton invisible
             int cx = mShowAnswerButton.getWidth() / 2;
             int cy = mShowAnswerButton.getHeight() / 2;
             float radius = mShowAnswerButton.getWidth();
-            Animator anim = ViewAnimationUtils.createCircularReveal(mShowAnswerButton, cx, cy, radius, 0);
+            Animator anim = ViewAnimationUtils.createCircularReveal(mShowAnswerButton, cx, cy,
+                    radius, 0);
             anim.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
@@ -125,15 +139,5 @@ public class CheatActivity extends AppCompatActivity {
         else {
             mShowAnswerButton.setVisibility(View.INVISIBLE);
         }
-    }
-
-    // Send data back to the parent activity
-    private void setAnswerShownResult(boolean isAnswerShown) {
-        // Create a new Intent with a boolean extra (for whether the answer was shown)
-        Intent data = new Intent();
-        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
-
-        // Send the Intent back to the parent activity
-        setResult(RESULT_OK, data);
     }
 }
