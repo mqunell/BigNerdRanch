@@ -54,58 +54,15 @@ public class QuizActivity extends AppCompatActivity {
             mCurrentIndex = savedInstanceState.getInt(BUNDLE_KEY_INDEX, 0);
         }
 
-        // V.OCL for elements that have "next" functionality
-        View.OnClickListener nextQuestion = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nextQuestion();
-            }
-        };
-
-        // TextView: Question
+        // UI elements
         mQuestionTextview = (TextView) findViewById(R.id.question_textview);
-        mQuestionTextview.setOnClickListener(nextQuestion);
-
-        // Button: True
         mTrueButton = (Button) findViewById(R.id.true_button);
-        mTrueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer(true);
-            }
-        });
-
-        // Button: False
         mFalseButton = (Button) findViewById(R.id.false_button);
-        mFalseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkAnswer(false);
-            }
-        });
-
-        // Button: Cheat
         mCheatButton = (Button) findViewById(R.id.cheat_button);
-        mCheatButton.setText(getString(R.string.cheat_button, MAX_CHEATS - mCheats, MAX_CHEATS));
-        mCheatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cheat();
-            }
-        });
-
-        // Button: Previous
         mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
-        mPreviousButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                previousQuestion();
-            }
-        });
-
-        // Button: Next
         mNextButton = (ImageButton) findViewById(R.id.next_button);
-        mNextButton.setOnClickListener(nextQuestion);
+
+        mCheatButton.setText(getString(R.string.cheat_button, MAX_CHEATS - mCheats, MAX_CHEATS));
 
         // Set the current question (has to be done after creating elements)
         updateQuestion();
@@ -147,24 +104,11 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
-    // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
-    private void updateQuestion() {
-        Question currentQuestion = mQuestions[mCurrentIndex];
+    // Checks if the user guessed correctly/cheated and if all Questions have been guessed
+    public void check_answer_button(View v) {
+        // Get the true/false from the button's tag
+        boolean userPressedTrue = Boolean.parseBoolean(v.getTag().toString());
 
-        // Sets mQuestionTextView to the current question
-        mQuestionTextview.setText(currentQuestion.getTextResId());
-
-        // Enable buttons if not answered, disable buttons if answered
-        if (currentQuestion.isAnswered()) {
-            setButtonsEnabled(false);
-        }
-        else {
-            setButtonsEnabled(true);
-        }
-    }
-
-    // Checks if the user cheated/guessed correctly and if all Questions have been guessed
-    private void checkAnswer(boolean userPressedTrue) {
         // The String id to be used for the correct/incorrect Toast
         int resultId;
 
@@ -198,6 +142,48 @@ public class QuizActivity extends AppCompatActivity {
         }
     }
 
+    // "Cheat" functionality
+    public void cheat_button(View v) {
+        // Start CheatActivity using its encapsulated Intent method
+        boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
+        boolean cheatedBefore = mQuestions[mCurrentIndex].isCheated();
+        Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue, cheatedBefore);
+        startActivityForResult(intent, REQUEST_CODE_CHEAT);
+    }
+
+    // "Previous" functionality
+    public void previous_button(View v) {
+        // Java's % is "remainder", not "mod", so manually wrap around if index = -1
+        mCurrentIndex -= 1;
+        if (mCurrentIndex == -1) {
+            mCurrentIndex = mQuestions.length - 1;
+        }
+
+        updateQuestion();
+    }
+
+    // "Next" functionality
+    public void next_button(View v) {
+        mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
+        updateQuestion();
+    }
+
+    // Updates mQuestionTextview, mTrueButton, and mFalseButton for new questions
+    private void updateQuestion() {
+        Question currentQuestion = mQuestions[mCurrentIndex];
+
+        // Sets mQuestionTextView to the current question
+        mQuestionTextview.setText(currentQuestion.getTextResId());
+
+        // Enable buttons if not answered, disable buttons if answered
+        if (currentQuestion.isAnswered()) {
+            setButtonsEnabled(false);
+        }
+        else {
+            setButtonsEnabled(true);
+        }
+    }
+
     // Displays the final score and disables all functionality
     private void endGame() {
         // Update mQuestionTextview with the final results
@@ -222,31 +208,5 @@ public class QuizActivity extends AppCompatActivity {
         else {
             mCheatButton.setEnabled(status);
         }
-    }
-
-    // "Cheat" functionality
-    private void cheat() {
-        // Start CheatActivity using its encapsulated Intent method
-        boolean answerIsTrue = mQuestions[mCurrentIndex].isAnswerTrue();
-        boolean cheatedBefore = mQuestions[mCurrentIndex].isCheated();
-        Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue, cheatedBefore);
-        startActivityForResult(intent, REQUEST_CODE_CHEAT);
-    }
-
-    // "Previous" functionality
-    private void previousQuestion() {
-        // Java's % is "remainder", not "mod", so manually wrap around if index = -1
-        mCurrentIndex -= 1;
-        if (mCurrentIndex == -1) {
-            mCurrentIndex = mQuestions.length - 1;
-        }
-
-        updateQuestion();
-    }
-
-    // "Next" functionality
-    private void nextQuestion() {
-        mCurrentIndex = (mCurrentIndex + 1) % mQuestions.length;
-        updateQuestion();
     }
 }
