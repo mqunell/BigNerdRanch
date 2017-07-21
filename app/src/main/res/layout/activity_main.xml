@@ -9,12 +9,14 @@
         android:id="@+id/main_button_geoquiz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/geo_quiz" />
+        android:text="@string/geo_quiz"
+        android:onClick="quiz_activity_button" />
 
     <Button
         android:id="@+id/main_button_criminalintent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/criminal_intent" />
+        android:text="@string/criminal_intent"
+        android:onClick="criminal_activity_button" />
 
 </LinearLayout>

@@ -57,17 +57,11 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
         mCheatedBefore = getIntent().getBooleanExtra(EXTRA_CHEATED_BEFORE, false);
 
+        // UI elements
         mAnswerTextview = (TextView) findViewById(R.id.answer_textview);
-
         mShowAnswerButton = (Button) findViewById(R.id.show_answer_button);
-        mShowAnswerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAnswer();
-            }
-        });
-
         mApiTextview = (TextView) findViewById(R.id.api_level_textview);
+
         mApiTextview.setText(getString(R.string.api_level, Build.VERSION.SDK_INT));
 
         // If the user already cheated on this question
@@ -97,8 +91,8 @@ public class CheatActivity extends AppCompatActivity {
         setResult(RESULT_OK, data);
     }
 
-    // "Show Answer" button method
-    private void showAnswer() {
+    // "Show Answer" functionality
+    public void show_answer_button(View v) {
         mCheatedNow = true;
 
         displayAnswer();
