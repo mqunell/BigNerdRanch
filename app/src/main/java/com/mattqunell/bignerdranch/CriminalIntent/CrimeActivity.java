@@ -21,8 +21,10 @@ public class CrimeActivity extends AppCompatActivity {
             fragment = new CrimeFragment();
 
             /*
-             * Transactions add, remove, attach, detach, and replace fragments
-             * This creates a new fragment transaction, includes one operation, and commits it
+             * Transactions add, remove, attach, detach, and replace fragments.
+             * This creates a new fragment transaction, includes one operation, and commits it.
+             * Adding the Fragment to the FragmentManager calls its onAttach, onCreate, and
+             * onCreateView methods.
              */
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)
