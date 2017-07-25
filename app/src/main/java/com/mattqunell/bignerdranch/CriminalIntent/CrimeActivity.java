@@ -7,28 +7,10 @@ import android.os.Bundle;
 
 import com.mattqunell.bignerdranch.R;
 
-public class CrimeActivity extends AppCompatActivity {
+public class CrimeActivity extends SingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (fragment == null) {
-            fragment = new CrimeFragment();
-
-            /*
-             * Transactions add, remove, attach, detach, and replace fragments.
-             * This creates a new fragment transaction, includes one operation, and commits it.
-             * Adding the Fragment to the FragmentManager calls its onAttach, onCreate, and
-             * onCreateView methods.
-             */
-            fm.beginTransaction()
-                    .add(R.id.fragment_container, fragment)
-                    .commit();
-        }
+    protected Fragment createFragment() {
+        return new CrimeFragment();
     }
 }
