@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mattqunell.bignerdranch.CriminalIntent.CrimeActivity;
+import com.mattqunell.bignerdranch.CriminalIntent.CrimeListActivity;
 import com.mattqunell.bignerdranch.GeoQuiz.QuizActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +21,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void criminal_activity_button(View v) {
-        startActivity(new Intent(MainActivity.this, CrimeActivity.class));
+        startActivity(new Intent(MainActivity.this, CrimeListActivity.class));
     }
 }
