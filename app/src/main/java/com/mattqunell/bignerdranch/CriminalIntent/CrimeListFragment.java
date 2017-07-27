@@ -13,6 +13,9 @@ import com.mattqunell.bignerdranch.R;
 
 import java.util.List;
 
+/*
+ * CrimeListFragment connects the RecyclerView to the ViewHolders and Adapter
+ */
 public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
@@ -30,34 +33,47 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    // Helper method that creates and sets the Adapter
     private void updateUI() {
-        CrimeLab crimeLab = CrimeLab.get(getActivity());
+
+        // Call the static getter, get the list of Crimes
+        CrimeLab crimeLab = CrimeLab.get();
         List<Crime> crimes = crimeLab.getCrimes();
 
         mAdapter = new CrimeAdapter(crimes);
         mCrimeRecyclerView.setAdapter(mAdapter);
     }
 
+    /*
+     * CrimeHolder: The ViewHolder
+     * Inflates and owns each individual layout (list_item_crime) within the RecyclerView.
+     * The bind(Crime) method is called each time a new Crime should be displayed.
+     */
     private class CrimeHolder extends RecyclerView.ViewHolder {
 
-        private Crime mCrime;
         private TextView mTitleTextview;
         private TextView mDateTextview;
 
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
 
+            // UI elements
             mTitleTextview = itemView.findViewById(R.id.crime_title);
             mDateTextview = itemView.findViewById(R.id.crime_date);
         }
 
+        // Set a specific layout's TextViews
         public void bind(Crime crime) {
-            mCrime = crime;
-            mTitleTextview.setText(mCrime.getTitle());
-            mDateTextview.setText(mCrime.getDate().toString());
+            mTitleTextview.setText(crime.getTitle());
+            mDateTextview.setText(crime.getDate().toString());
         }
     }
 
+    /*
+     * CrimeAdapter: The Adapter
+     * Connects the ViewHolder and Crimes by knowing how Crime and CrimeLab are implemented.
+     * The overridden methods are all required and called by the RecyclerView itself.
+     */
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
 
         private List<Crime> mCrimes;

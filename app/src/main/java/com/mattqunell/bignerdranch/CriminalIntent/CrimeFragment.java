@@ -16,6 +16,9 @@ import com.mattqunell.bignerdranch.R;
 
 import static android.widget.CompoundButton.*;
 
+/*
+ * CrimeFragment is the controller between Crime (model) and fragment_crime (view).
+ */
 public class CrimeFragment extends Fragment {
 
     private Crime mCrime;

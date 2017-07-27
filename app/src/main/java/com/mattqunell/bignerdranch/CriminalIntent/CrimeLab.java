@@ -12,17 +12,17 @@ public class CrimeLab {
 
     private List<Crime> mCrimes;
 
-    // Getter that creates sCrimeLab if it doesn't exist and returns it
-    public static CrimeLab get(Context context) {
+    // Static getter that creates sCrimeLab if it doesn't exist and returns it
+    public static CrimeLab get() {
         if (sCrimeLab == null) {
-            sCrimeLab = new CrimeLab(context);
+            sCrimeLab = new CrimeLab();
         }
 
         return sCrimeLab;
     }
 
     // Private Constructor to limit instantiation
-    private CrimeLab(Context context) {
+    private CrimeLab() {
         mCrimes = new ArrayList<>();
 
         // Dummy Crimes (temporary)

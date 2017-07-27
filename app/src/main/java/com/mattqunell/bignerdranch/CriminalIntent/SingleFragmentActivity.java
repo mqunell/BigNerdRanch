@@ -7,6 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mattqunell.bignerdranch.R;
 
+/*
+ * Nearly every Activity in the BNR book will require this same code, so it is stashed in an
+ * abstract class for reuse. Subclasses (ex. CrimeActivity, CrimeListActivity) must implement a
+ * method that returns an instance of the Fragment it hosts.
+ */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     protected abstract Fragment createFragment();
