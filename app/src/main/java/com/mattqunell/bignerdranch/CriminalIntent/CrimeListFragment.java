@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mattqunell.bignerdranch.R;
 
@@ -49,13 +50,15 @@ public class CrimeListFragment extends Fragment {
      * Inflates and owns each individual layout (list_item_crime) within the RecyclerView.
      * The bind(Crime) method is called each time a new Crime should be displayed.
      */
-    private class CrimeHolder extends RecyclerView.ViewHolder {
+    private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private Crime mCrime;
         private TextView mTitleTextview;
         private TextView mDateTextview;
 
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
+            itemView.setOnClickListener(this);
 
             // UI elements
             mTitleTextview = itemView.findViewById(R.id.crime_title);
@@ -64,8 +67,15 @@ public class CrimeListFragment extends Fragment {
 
         // Set a specific layout's TextViews
         public void bind(Crime crime) {
-            mTitleTextview.setText(crime.getTitle());
-            mDateTextview.setText(crime.getDate().toString());
+            mCrime = crime;
+            mTitleTextview.setText(mCrime.getTitle());
+            mDateTextview.setText(mCrime.getDate().toString());
+        }
+
+        @Override
+        public void onClick(View view) {
+            String toastText = mCrime.getTitle() + " clicked!";
+            Toast.makeText(getActivity(), toastText, Toast.LENGTH_SHORT).show();
         }
     }
 
