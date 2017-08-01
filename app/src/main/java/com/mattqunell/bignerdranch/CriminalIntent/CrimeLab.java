@@ -1,11 +1,15 @@
 package com.mattqunell.bignerdranch.CriminalIntent;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/*
+ * CrimeLab is implemented as a singleton. A singleton is a class that allows only one instance of
+ * itself to be created. It exists as long as the application is in memory, and is available through
+ * lifecycle changes in activities and fragments. Singletons allow data to be easily passed between
+ * controller classes, but should not be used for everything or as long-term storage solutions.
+ */
 public class CrimeLab {
 
     private static CrimeLab sCrimeLab;
