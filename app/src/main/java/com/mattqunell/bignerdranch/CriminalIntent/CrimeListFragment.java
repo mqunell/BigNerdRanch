@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class CrimeListFragment extends Fragment {
         private Crime mCrime;
         private TextView mTitleTextview;
         private TextView mDateTextview;
+        private ImageView mSolvedImageview;
 
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
@@ -63,6 +65,7 @@ public class CrimeListFragment extends Fragment {
             // UI elements
             mTitleTextview = itemView.findViewById(R.id.crime_title);
             mDateTextview = itemView.findViewById(R.id.crime_date);
+            mSolvedImageview = itemView.findViewById(R.id.crime_solved);
         }
 
         // Set a specific layout's TextViews
@@ -70,6 +73,13 @@ public class CrimeListFragment extends Fragment {
             mCrime = crime;
             mTitleTextview.setText(mCrime.getTitle());
             mDateTextview.setText(mCrime.getDate().toString());
+
+            /*
+             * Ternary operator: boolean statement ? true result : false result
+             * crime.isSolved() == true   ->  View.VISIBLE
+             * crime.isSolved() == false  ->  View.GONE
+             */
+            mSolvedImageview.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
         }
 
         @Override
