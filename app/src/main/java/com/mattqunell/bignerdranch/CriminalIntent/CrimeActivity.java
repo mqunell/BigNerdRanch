@@ -7,13 +7,15 @@ import android.support.v4.app.Fragment;
 import java.util.UUID;
 
 /*
- * CrimeActivity extends the generic and abstract SingleFragmentActivity, and only needs a method
- * that returns a new CrimeFragment.
+ * CrimeActivity extends the generic and abstract SingleFragmentActivity. It has an encapsulated
+ * Intent method that allows other Activities/Fragments to easily create an Intent with the specific
+ * Crime UUID as an extra. createFragment() requires knowledge of CrimeFragment, but allows it to
+ * remain independent by not needing to access this activity for an Intent extra.
  */
 public class CrimeActivity extends SingleFragmentActivity {
 
     // Tag for Intent extra
-    public static final String EXTRA_CRIME_ID = "com.mattqunell.bignerdranch.crime_id";
+    private static final String EXTRA_CRIME_ID = "com.mattqunell.bignerdranch.crime_id";
 
     // Encapsulates the implementation details of CrimeActivity's returned Intent
     public static Intent newIntent(Context context, UUID crimeId) {
@@ -22,8 +24,10 @@ public class CrimeActivity extends SingleFragmentActivity {
         return intent;
     }
 
+    // Creates an instance of CrimeFragment from its encapsulated method
     @Override
     protected Fragment createFragment() {
-        return new CrimeFragment();
+        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(crimeId);
     }
 }
