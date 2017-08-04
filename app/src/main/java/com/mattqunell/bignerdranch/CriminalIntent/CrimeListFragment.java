@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mattqunell.bignerdranch.R;
 
@@ -36,15 +35,28 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
-    // Helper method that creates and sets the Adapter
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        updateUI();
+    }
+
+    // Helper method that creates and sets/updates the Adapter
     private void updateUI() {
 
         // Call the static getter, get the list of Crimes
         CrimeLab crimeLab = CrimeLab.get();
         List<Crime> crimes = crimeLab.getCrimes();
 
-        mAdapter = new CrimeAdapter(crimes);
-        mCrimeRecyclerView.setAdapter(mAdapter);
+        // Create the adapter, or refresh the existing one
+        if (mAdapter == null) {
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }
+        else {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     /*
