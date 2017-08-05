@@ -27,15 +27,11 @@
             android:label="@string/geo_quiz">
         </activity>
         <activity
-            android:name=".CriminalIntent.CrimeActivity"
+            android:name=".CriminalIntent.CrimePagerActivity"
             android:label="@string/criminal_intent">
         </activity>
         <activity
             android:name=".CriminalIntent.CrimeListActivity"
-            android:label="@string/criminal_intent">
-        </activity>
-        <activity
-            android:name=".CriminalIntent.CrimePagerActivity"
             android:label="@string/criminal_intent">
         </activity>
     </application>
