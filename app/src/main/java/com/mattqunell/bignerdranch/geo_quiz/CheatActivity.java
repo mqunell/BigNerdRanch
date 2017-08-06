@@ -1,4 +1,4 @@
-package com.mattqunell.bignerdranch.GeoQuiz;
+package com.mattqunell.bignerdranch.geo_quiz;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

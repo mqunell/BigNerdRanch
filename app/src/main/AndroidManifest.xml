@@ -19,19 +19,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GeoQuiz.QuizActivity"
+            android:name=".geo_quiz.QuizActivity"
             android:label="@string/geo_quiz">
         </activity>
         <activity
-            android:name=".GeoQuiz.CheatActivity"
+            android:name=".geo_quiz.CheatActivity"
             android:label="@string/geo_quiz">
         </activity>
         <activity
-            android:name=".CriminalIntent.CrimePagerActivity"
+            android:name=".criminal_intent.CrimePagerActivity"
             android:label="@string/criminal_intent">
         </activity>
         <activity
-            android:name=".CriminalIntent.CrimeListActivity"
+            android:name=".criminal_intent.CrimeListActivity"
             android:label="@string/criminal_intent">
         </activity>
     </application>

@@ -1,4 +1,4 @@
-package com.mattqunell.bignerdranch.GeoQuiz;
+package com.mattqunell.bignerdranch.geo_quiz;
 
 /*
  * The lack of public/protected/private modifiers makes these methods "package-private" which allows

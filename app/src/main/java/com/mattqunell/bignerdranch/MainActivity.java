@@ -5,8 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.mattqunell.bignerdranch.CriminalIntent.CrimeListActivity;
-import com.mattqunell.bignerdranch.GeoQuiz.QuizActivity;
+import com.mattqunell.bignerdranch.criminal_intent.CrimeListActivity;
+import com.mattqunell.bignerdranch.geo_quiz.QuizActivity;
 
 public class MainActivity extends AppCompatActivity {
 

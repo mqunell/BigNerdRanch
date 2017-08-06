@@ -1,4 +1,4 @@
-package com.mattqunell.bignerdranch.CriminalIntent;
+package com.mattqunell.bignerdranch.criminal_intent;
 
 import android.content.Context;
 import android.content.Intent;
