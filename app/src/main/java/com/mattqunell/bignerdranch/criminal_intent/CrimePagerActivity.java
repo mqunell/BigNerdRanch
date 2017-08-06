@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.mattqunell.bignerdranch.R;
 
@@ -55,12 +56,22 @@ public class CrimePagerActivity extends AppCompatActivity {
             }
         });
 
-        // Loop through the Crimes to find the one that was clicked and show it
+        // Loop through the Crimes to find the index of the one that was clicked and show it
         for (int i = 0; i < mCrimes.size(); i++) {
             if (mCrimes.get(i).getId().equals(crimeId)) {
                 mViewPager.setCurrentItem(i);
                 break;
             }
         }
+    }
+
+    // first_crime_button listener
+    public void showFirstCrime(View v) {
+        mViewPager.setCurrentItem(0);
+    }
+
+    // last_crime_button listener
+    public void showLastCrime(View v) {
+        mViewPager.setCurrentItem(mCrimes.size());
     }
 }

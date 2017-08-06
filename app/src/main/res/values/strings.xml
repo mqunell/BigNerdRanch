@@ -26,10 +26,14 @@
     <string name="judgment_toast">Cheating is wrong.</string>
     <string name="api_level">API level: %1$d</string>
 
-    <!-- CriminalIntent -->
-    <string name="crime_title_hint">Enter a title for the crime.</string>
+    <!-- Criminal Intent: fragment_crime -->
     <string name="crime_title_label">Title</string>
+    <string name="crime_title_hint">Enter a title for the crime.</string>
     <string name="crime_details_label">Details</string>
     <string name="crime_solved_label">Solved</string>
+
+    <!-- Criminal Intent: activity_crime_pager -->
+    <string name="first_crime">First Crime</string>
+    <string name="last_crime">Last Crime</string>
 
 </resources>
