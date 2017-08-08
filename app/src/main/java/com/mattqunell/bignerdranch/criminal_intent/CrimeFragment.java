@@ -1,5 +1,7 @@
 package com.mattqunell.bignerdranch.criminal_intent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 
 import com.mattqunell.bignerdranch.R;
 
+import java.util.Date;
 import java.util.UUID;
 
 import static android.widget.CompoundButton.*;
@@ -28,6 +31,9 @@ public class CrimeFragment extends Fragment {
     // Tags for Bundle argument and DialogFragment
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+
+    // Request code for targeted Fragment
+    private static final int REQUEST_DATE = 0;
 
     // UI elements
     private Crime mCrime;
@@ -85,6 +91,9 @@ public class CrimeFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
+
+                // Set this Fragment as the the DatePickerFragment's target
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
             }
         });
@@ -99,5 +108,15 @@ public class CrimeFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Like in geo_quiz/QuizActivity, the outer if statement is not actually necessary
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DATE && data != null) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mCrime.setDate(date);
+            mDateButton.setText(mCrime.getDate().toString());
+        }
     }
 }
