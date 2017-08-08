@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,12 +78,13 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = v.findViewById(R.id.crime_date);
-        mDateButton.setText(mCrime.getDate().toString());
+        //mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(DateFormat.format("EEEE, MMM d, yyyy", mCrime.getDate()));
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentManager manager = getFragmentManager();
-                DatePickerFragment dialog = new DatePickerFragment();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.show(manager, DIALOG_DATE);
             }
         });
