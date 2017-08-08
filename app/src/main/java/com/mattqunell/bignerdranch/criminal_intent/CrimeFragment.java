@@ -84,8 +84,7 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateButton = v.findViewById(R.id.crime_date);
-        //mDateButton.setText(mCrime.getDate().toString());
-        mDateButton.setText(DateFormat.format("EEEE, MMM d, yyyy", mCrime.getDate()));
+        updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,7 +115,13 @@ public class CrimeFragment extends Fragment {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DATE && data != null) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
-            mDateButton.setText(mCrime.getDate().toString());
+            updateDate();
         }
+    }
+
+    // Helper method for updating mDateButton's text
+    private void updateDate() {
+        //mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(DateFormat.format("EEEE, MMM d, yyyy", mCrime.getDate()));
     }
 }
