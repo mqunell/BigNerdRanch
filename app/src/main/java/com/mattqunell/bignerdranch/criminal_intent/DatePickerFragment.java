@@ -36,6 +36,11 @@ public class DatePickerFragment extends DialogFragment {
         return fragment;
     }
 
+    // Encapsulates the implementation details of DatePickerFragment's returned Intent
+    public static Date getSelectedDate(Intent result) {
+        return ((Date) result.getSerializableExtra(EXTRA_DATE));
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Get the Date from the Arguments

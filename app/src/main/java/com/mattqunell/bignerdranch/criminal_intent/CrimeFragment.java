@@ -113,7 +113,7 @@ public class CrimeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Like in geo_quiz/QuizActivity, the outer if statement is not actually necessary
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DATE && data != null) {
-            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            Date date = DatePickerFragment.getSelectedDate(data);
             mCrime.setDate(date);
             updateDate();
         }
