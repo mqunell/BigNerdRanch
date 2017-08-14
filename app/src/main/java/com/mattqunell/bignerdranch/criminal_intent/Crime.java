@@ -3,7 +3,7 @@ package com.mattqunell.bignerdranch.criminal_intent;
 import java.util.Date;
 import java.util.UUID;
 
-public class Crime {
+public class Crime implements Comparable<Crime> {
 
     private UUID mId;
     private String mTitle;
@@ -41,5 +41,10 @@ public class Crime {
 
     public void setSolved(boolean solved) {
         mSolved = solved;
+    }
+
+    @Override
+    public int compareTo(Crime other) {
+        return getDate().compareTo(other.getDate());
     }
 }

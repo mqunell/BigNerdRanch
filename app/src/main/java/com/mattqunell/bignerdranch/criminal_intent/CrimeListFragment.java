@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.mattqunell.bignerdranch.R;
 
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -75,6 +76,10 @@ public class CrimeListFragment extends Fragment {
 
                 // Return true, indicating that processing is done
                 return true;
+
+            case R.id.sort_crimes:
+                Collections.sort(CrimeLab.get().getCrimes());
+                updateUI();
 
             default:
                 return super.onOptionsItemSelected(item);
