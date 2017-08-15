@@ -64,6 +64,7 @@ public class CrimeListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // "New Crime" selected
             case R.id.new_crime:
 
                 // Make a new Crime, add it to CrimeLab
@@ -77,6 +78,7 @@ public class CrimeListFragment extends Fragment {
                 // Return true, indicating that processing is done
                 return true;
 
+            // "Sort Crimes" selected
             case R.id.sort_crimes:
                 Collections.sort(CrimeLab.get().getCrimes());
                 updateUI();

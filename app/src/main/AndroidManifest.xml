@@ -28,7 +28,8 @@
         </activity>
         <activity
             android:name=".criminal_intent.CrimePagerActivity"
-            android:label="@string/criminal_intent">
+            android:label="@string/criminal_intent"
+            android:parentActivityName=".criminal_intent.CrimeListActivity">
         </activity>
         <activity
             android:name=".criminal_intent.CrimeListActivity"
