@@ -23,8 +23,12 @@ import java.util.List;
 
 /*
  * CrimeListFragment connects the RecyclerView to the ViewHolders and Adapter
+ * Known bug: Shown subtitle does not persist through Up navigation
  */
 public class CrimeListFragment extends Fragment {
+
+    // Key for bundle
+    private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
@@ -33,7 +37,6 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
     }
 
@@ -44,22 +47,30 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        // Set mSubtitleVisible if possible (used for device rotation)
+        if (savedInstState != null) {
+            mSubtitleVisible = savedInstState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        }
 
+        updateUI();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         updateUI();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         inflater.inflate(R.menu.fragment_crime_list, menu);
 
         // Set show_subtitle's text to "Show Subtitle" or "Hide Subtitle"
@@ -86,6 +97,7 @@ public class CrimeListFragment extends Fragment {
 
             // "Show Subtitle" selected
             case R.id.show_subtitle:
+
                 // Alternate "Show" and "Hide", and update the menu
                 mSubtitleVisible = !mSubtitleVisible;
                 getActivity().invalidateOptionsMenu();
