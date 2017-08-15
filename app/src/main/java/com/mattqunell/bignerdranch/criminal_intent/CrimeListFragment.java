@@ -3,6 +3,7 @@ package com.mattqunell.bignerdranch.criminal_intent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -27,6 +28,7 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private boolean mSubtitleVisible;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,10 @@ public class CrimeListFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.fragment_crime_list, menu);
+
+        // Set show_subtitle's text to "Show Subtitle" or "Hide Subtitle"
+        MenuItem subtitleItem = menu.findItem(R.id.show_subtitle);
+        subtitleItem.setTitle(mSubtitleVisible ? R.string.hide_subtitle : R.string.show_subtitle);
     }
 
     @Override
@@ -78,6 +84,15 @@ public class CrimeListFragment extends Fragment {
                 // Return true, indicating that processing is done
                 return true;
 
+            // "Show Subtitle" selected
+            case R.id.show_subtitle:
+                // Alternate "Show" and "Hide", and update the menu
+                mSubtitleVisible = !mSubtitleVisible;
+                getActivity().invalidateOptionsMenu();
+
+                updateSubtitle();
+                updateUI();
+
             // "Sort Crimes" selected
             case R.id.sort_crimes:
                 Collections.sort(CrimeLab.get().getCrimes());
@@ -86,6 +101,21 @@ public class CrimeListFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Helper method for setting/removing the subtitle
+    private void updateSubtitle() {
+        String subtitle = null;
+
+        // If the subtitle is visible, get the number of Crimes and set a formatted String
+        if (mSubtitleVisible) {
+            int crimeCount = CrimeLab.get().getCrimes().size();
+            subtitle = getString(R.string.subtitle_format, crimeCount);
+        }
+
+        // Set the subtitle
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
     // Helper method that creates and sets/updates the Adapter
@@ -103,6 +133,8 @@ public class CrimeListFragment extends Fragment {
         else {
             mAdapter.notifyDataSetChanged();
         }
+
+        updateSubtitle();
     }
 
     /*
