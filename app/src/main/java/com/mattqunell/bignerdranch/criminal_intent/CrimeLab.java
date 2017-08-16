@@ -10,14 +10,14 @@ import java.util.UUID;
  * lifecycle changes in activities and fragments. Singletons allow data to be easily passed between
  * controller classes, but should not be used for everything or as long-term storage solutions.
  */
-public class CrimeLab {
+class CrimeLab {
 
     private static CrimeLab sCrimeLab;
 
     private List<Crime> mCrimes;
 
     // Static getter that creates sCrimeLab if it doesn't exist and returns it
-    public static CrimeLab get() {
+    static CrimeLab get() {
         if (sCrimeLab == null) {
             sCrimeLab = new CrimeLab();
         }
@@ -30,15 +30,15 @@ public class CrimeLab {
         mCrimes = new ArrayList<>();
     }
 
-    public void addCrime(Crime c) {
+    void addCrime(Crime c) {
         mCrimes.add(c);
     }
 
-    public List<Crime> getCrimes() {
+    List<Crime> getCrimes() {
         return mCrimes;
     }
 
-    public Crime getCrime(UUID id) {
+    Crime getCrime(UUID id) {
         for (Crime crime : mCrimes) {
             if (crime.getId().equals(id)) {
                 return crime;
@@ -48,7 +48,7 @@ public class CrimeLab {
         return null;
     }
 
-    public void removeCrime(Crime crime) {
+    void removeCrime(Crime crime) {
         mCrimes.remove(crime);
     }
 }
