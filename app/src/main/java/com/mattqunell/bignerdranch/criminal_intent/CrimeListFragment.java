@@ -153,7 +153,10 @@ public class CrimeListFragment extends Fragment {
         // If the subtitle is visible, get the number of Crimes and set a formatted String
         if (mSubtitleVisible) {
             int crimeCount = CrimeLab.get().getCrimes().size();
-            subtitle = getString(R.string.subtitle_format, crimeCount);
+
+            // Get the correctly formatted String
+            subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, crimeCount,
+                    crimeCount);
         }
 
         // Set the subtitle
