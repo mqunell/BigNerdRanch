@@ -32,7 +32,7 @@ public class CrimeListFragment extends Fragment {
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
-    private boolean mSubtitleVisible;
+    private boolean mSubtitleVisible = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,25 +41,25 @@ public class CrimeListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle inState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
         mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         // Set mSubtitleVisible if possible (used for device rotation)
-        if (savedInstState != null) {
-            mSubtitleVisible = savedInstState.getBoolean(SAVED_SUBTITLE_VISIBLE);
+        if (inState != null) {
+            mSubtitleVisible = inState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
 
-        updateUI();
+        updateUi();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        updateUI();
+        updateUi();
     }
 
     @Override
@@ -110,7 +110,7 @@ public class CrimeListFragment extends Fragment {
                 getActivity().invalidateOptionsMenu();
 
                 updateSubtitle();
-                updateUI();
+                updateUi();
 
                 // Return true, indicating that processing is done
                 return true;
@@ -118,7 +118,7 @@ public class CrimeListFragment extends Fragment {
             // "Sort Crimes" selected
             case R.id.sort_crimes:
                 Collections.sort(CrimeLab.get().getCrimes());
-                updateUI();
+                updateUi();
 
                 // Return true, indicating that processing is done
                 return true;
@@ -126,6 +126,24 @@ public class CrimeListFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Helper method that creates and sets/updates the Adapter
+    private void updateUi() {
+
+        // Get the list of Crimes
+        List<Crime> crimes = CrimeLab.get().getCrimes();
+
+        // Create the adapter, or refresh the existing one
+        if (mAdapter == null) {
+            mAdapter = new CrimeAdapter(crimes);
+            mCrimeRecyclerView.setAdapter(mAdapter);
+        }
+        else {
+            mAdapter.notifyDataSetChanged();
+        }
+
+        updateSubtitle();
     }
 
     // Helper method for setting/removing the subtitle
@@ -141,25 +159,6 @@ public class CrimeListFragment extends Fragment {
         // Set the subtitle
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         activity.getSupportActionBar().setSubtitle(subtitle);
-    }
-
-    // Helper method that creates and sets/updates the Adapter
-    private void updateUI() {
-
-        // Call the static getter, get the list of Crimes
-        CrimeLab crimeLab = CrimeLab.get();
-        List<Crime> crimes = crimeLab.getCrimes();
-
-        // Create the adapter, or refresh the existing one
-        if (mAdapter == null) {
-            mAdapter = new CrimeAdapter(crimes);
-            mCrimeRecyclerView.setAdapter(mAdapter);
-        }
-        else {
-            mAdapter.notifyDataSetChanged();
-        }
-
-        updateSubtitle();
     }
 
     /*
