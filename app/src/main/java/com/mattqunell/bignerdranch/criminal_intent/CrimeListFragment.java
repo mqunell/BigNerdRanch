@@ -80,6 +80,13 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        /*
+         * true has to be returned in each individual case to indicate the processing is done, so
+         * that the following cases don't run as well. For example, without returning true in
+         * "case R.id.show_subtitle", the code in "case R.id.sort_crimes" is also ran when the
+         * show_subtitle MenuItem is selected.
+         */
+
         switch (item.getItemId()) {
             // "New Crime" selected
             case R.id.new_crime:
@@ -105,10 +112,16 @@ public class CrimeListFragment extends Fragment {
                 updateSubtitle();
                 updateUI();
 
+                // Return true, indicating that processing is done
+                return true;
+
             // "Sort Crimes" selected
             case R.id.sort_crimes:
                 Collections.sort(CrimeLab.get().getCrimes());
                 updateUI();
+
+                // Return true, indicating that processing is done
+                return true;
 
             default:
                 return super.onOptionsItemSelected(item);
