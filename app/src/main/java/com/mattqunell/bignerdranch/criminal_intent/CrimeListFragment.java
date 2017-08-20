@@ -2,6 +2,7 @@ package com.mattqunell.bignerdranch.criminal_intent;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mattqunell.bignerdranch.R;
@@ -33,7 +33,7 @@ public class CrimeListFragment extends Fragment {
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
     // The "layers" of the View
-    private LinearLayout mEmptyCrimeView;
+    private ConstraintLayout mEmptyCrimeView;
     private RecyclerView mCrimeRecyclerView;
 
     // UI elements
