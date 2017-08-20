@@ -26,20 +26,8 @@
     <string name="judgment_toast">Cheating is wrong.</string>
     <string name="api_level">API level: %1$d</string>
 
-    <!-- Criminal Intent: fragment_crime -->
-    <string name="crime_title_label">Title</string>
-    <string name="crime_title_hint">Enter a title for the crime.</string>
-    <string name="crime_details_label">Details</string>
-    <string name="crime_solved_label">Solved</string>
-
-    <!-- Criminal Intent: activity_crime_pager -->
-    <string name="first_crime">First Crime</string>
-    <string name="last_crime">Last Crime</string>
-
-    <!-- Criminal Intent: DatePickerFragment -->
-    <string name="date_picker_title">Date of crime:</string>
-
-    <!-- Criminal Intent: menu fragment_crime_list -->
+    <!-- Criminal Intent -->
+    <string name="no_crimes">There are no crimes.\nWould you like to add one?</string>
     <string name="new_crime">New Crime</string>
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
@@ -48,8 +36,15 @@
         <item quantity="one">%1$d crime</item>
         <item quantity="other">%1$d crimes</item>
     </plurals>
-
-    <!-- Criminal Intent: menu fragment_crime -->
     <string name="remove_crime">Remove Crime</string>
+
+    <string name="crime_title_label">Title</string>
+    <string name="crime_title_hint">Enter a title for the crime.</string>
+    <string name="crime_details_label">Details</string>
+    <string name="crime_solved_label">Solved</string>
+    <string name="date_picker_title">Date of crime:</string>
+
+    <string name="first_crime">First Crime</string>
+    <string name="last_crime">Last Crime</string>
 
 </resources>
