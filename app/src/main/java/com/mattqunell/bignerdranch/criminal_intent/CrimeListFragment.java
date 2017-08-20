@@ -13,7 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mattqunell.bignerdranch.R;
@@ -30,8 +32,17 @@ public class CrimeListFragment extends Fragment {
     // Key for bundle
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
 
+    // The "layers" of the View
+    private LinearLayout mEmptyCrimeView;
     private RecyclerView mCrimeRecyclerView;
+
+    // UI elements
+    private Button mNewCrimeButton;
+
+    // Adapter for connecting the RecyclerView and Crimes
     private CrimeAdapter mAdapter;
+
+    // Instance variables
     private boolean mSubtitleVisible = false;
 
     @Override
@@ -44,6 +55,18 @@ public class CrimeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle inState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
+        // empty_crime_view layer
+        mEmptyCrimeView = view.findViewById(R.id.empty_crime_view);
+
+        mNewCrimeButton = view.findViewById(R.id.new_crime_button);
+        mNewCrimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newCrime();
+            }
+        });
+
+        // crime_recycler_view layer
         mCrimeRecyclerView = view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -90,16 +113,8 @@ public class CrimeListFragment extends Fragment {
         switch (item.getItemId()) {
             // "New Crime" selected
             case R.id.new_crime:
+                newCrime();
 
-                // Make a new Crime, add it to CrimeLab
-                Crime crime = new Crime();
-                CrimeLab.get().addCrime(crime);
-
-                // Start CrimePagerActivity (and CrimeFragment) at the new Crime
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
-                startActivity(intent);
-
-                // Return true, indicating that processing is done
                 return true;
 
             // "Show Subtitle" selected
@@ -112,7 +127,6 @@ public class CrimeListFragment extends Fragment {
                 updateSubtitle();
                 updateUi();
 
-                // Return true, indicating that processing is done
                 return true;
 
             // "Sort Crimes" selected
@@ -120,7 +134,6 @@ public class CrimeListFragment extends Fragment {
                 Collections.sort(CrimeLab.get().getCrimes());
                 updateUi();
 
-                // Return true, indicating that processing is done
                 return true;
 
             default:
@@ -143,7 +156,27 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
 
+        // If there are Crimes to display, hide the empty_crime_view layer
+        if (crimes.size() == 0) {
+            mEmptyCrimeView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mEmptyCrimeView.setVisibility(View.INVISIBLE);
+        }
+
         updateSubtitle();
+    }
+
+    // Helper method for "New Crime" functionality
+    private void newCrime() {
+
+        // Make a new Crime, add it to CrimeLab
+        Crime crime = new Crime();
+        CrimeLab.get().addCrime(crime);
+
+        // Start CrimePagerActivity (and CrimeFragment) at the new Crime
+        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+        startActivity(intent);
     }
 
     // Helper method for setting/removing the subtitle
