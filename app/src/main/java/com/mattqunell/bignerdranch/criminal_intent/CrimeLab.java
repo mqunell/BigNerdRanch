@@ -1,5 +1,10 @@
 package com.mattqunell.bignerdranch.criminal_intent;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.mattqunell.bignerdranch.database.CrimeBaseHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,18 +20,21 @@ class CrimeLab {
     private static CrimeLab sCrimeLab;
 
     private List<Crime> mCrimes;
+    private SQLiteDatabase mDatabase;
 
     // Static getter that creates sCrimeLab if it doesn't exist and returns it
-    static CrimeLab get() {
+    static CrimeLab get(Context context) {
         if (sCrimeLab == null) {
-            sCrimeLab = new CrimeLab();
+            sCrimeLab = new CrimeLab(context);
         }
 
         return sCrimeLab;
     }
 
     // Private Constructor to limit instantiation
-    private CrimeLab() {
+    private CrimeLab(Context context) {
+        mDatabase = new CrimeBaseHelper(context.getApplicationContext()).getWritableDatabase();
+
         mCrimes = new ArrayList<>();
     }
 

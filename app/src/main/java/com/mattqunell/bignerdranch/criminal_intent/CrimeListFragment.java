@@ -133,7 +133,7 @@ public class CrimeListFragment extends Fragment {
 
             // "Sort Crimes" selected
             case R.id.sort_crimes:
-                Collections.sort(CrimeLab.get().getCrimes());
+                Collections.sort(CrimeLab.get(getActivity()).getCrimes());
                 updateUi();
 
                 return true;
@@ -148,7 +148,7 @@ public class CrimeListFragment extends Fragment {
 
         // Make a new Crime, add it to CrimeLab
         Crime crime = new Crime();
-        CrimeLab.get().addCrime(crime);
+        CrimeLab.get(getActivity()).addCrime(crime);
 
         // Start CrimePagerActivity (and CrimeFragment) at the new Crime
         Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
@@ -159,7 +159,7 @@ public class CrimeListFragment extends Fragment {
     private void updateUi() {
 
         // Get the list of Crimes
-        List<Crime> crimes = CrimeLab.get().getCrimes();
+        List<Crime> crimes = CrimeLab.get(getActivity()).getCrimes();
 
         // Create the adapter, or refresh the existing one
         if (mAdapter == null) {
@@ -182,7 +182,7 @@ public class CrimeListFragment extends Fragment {
 
         // If the subtitle is visible, get the number of Crimes and set a formatted String
         if (mSubtitleVisible) {
-            int crimeCount = CrimeLab.get().getCrimes().size();
+            int crimeCount = CrimeLab.get(getActivity()).getCrimes().size();
 
             // Get the correctly formatted String
             subtitle = getResources().getQuantityString(R.plurals.subtitle_plural, crimeCount,

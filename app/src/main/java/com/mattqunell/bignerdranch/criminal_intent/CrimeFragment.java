@@ -60,7 +60,7 @@ public class CrimeFragment extends Fragment {
         setHasOptionsMenu(true);
 
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
-        mCrime = CrimeLab.get().getCrime(crimeId);
+        mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
     }
 
     // Inflate the layout and handle updating the Crime
@@ -137,7 +137,7 @@ public class CrimeFragment extends Fragment {
             case R.id.remove_crime:
 
                 // Remove it from CrimeLab
-                CrimeLab.get().removeCrime(mCrime);
+                CrimeLab.get(getActivity()).removeCrime(mCrime);
 
                 // Return to the previous Activity
                 getActivity().finish();
