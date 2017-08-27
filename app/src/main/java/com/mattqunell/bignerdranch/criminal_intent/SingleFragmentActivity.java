@@ -14,6 +14,7 @@ import com.mattqunell.bignerdranch.R;
  */
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
+    // Abstract method that must be implemented in child classes to return a Fragment
     protected abstract Fragment createFragment();
 
     @Override
@@ -25,13 +26,14 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);
 
         if (fragment == null) {
+
+            // Get the Fragment from the child class
             fragment = createFragment();
 
             /*
-             * Transactions add, remove, attach, detach, and replace fragments.
-             * This creates a new fragment transaction, includes one operation, and commits it.
-             * Adding the Fragment to the FragmentManager calls its onAttach, onCreate, and
-             * onCreateView methods.
+             * Transactions add, remove, attach, detach, and replace fragments. This creates a new
+             * fragment transaction, includes one operation, and commits it. Adding the Fragment to
+             * the FragmentManager calls its onAttach, onCreate, and onCreateView methods.
              */
             fm.beginTransaction()
                     .add(R.id.fragment_container, fragment)

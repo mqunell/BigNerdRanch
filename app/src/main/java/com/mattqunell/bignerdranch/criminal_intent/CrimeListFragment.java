@@ -53,6 +53,8 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle inState) {
+
+        // Inflate the layout file
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
         // empty_crime_view layer
@@ -124,8 +126,8 @@ public class CrimeListFragment extends Fragment {
                 mSubtitleVisible = !mSubtitleVisible;
                 getActivity().invalidateOptionsMenu();
 
-                updateSubtitle();
                 updateUi();
+                updateSubtitle();
 
                 return true;
 
@@ -139,6 +141,18 @@ public class CrimeListFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    // Helper method for "New Crime" functionality
+    private void newCrime() {
+
+        // Make a new Crime, add it to CrimeLab
+        Crime crime = new Crime();
+        CrimeLab.get().addCrime(crime);
+
+        // Start CrimePagerActivity (and CrimeFragment) at the new Crime
+        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+        startActivity(intent);
     }
 
     // Helper method that creates and sets/updates the Adapter
@@ -156,27 +170,10 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
         }
 
-        // If there are Crimes to display, hide the empty_crime_view layer
-        if (crimes.size() == 0) {
-            mEmptyCrimeView.setVisibility(View.VISIBLE);
-        }
-        else {
-            mEmptyCrimeView.setVisibility(View.INVISIBLE);
-        }
+        // Show the empty_crime_view layer when there are 0 Crimes, or hide when >= 1 Crimes
+        mEmptyCrimeView.setVisibility(crimes.size() == 0 ? View.VISIBLE : View.INVISIBLE);
 
         updateSubtitle();
-    }
-
-    // Helper method for "New Crime" functionality
-    private void newCrime() {
-
-        // Make a new Crime, add it to CrimeLab
-        Crime crime = new Crime();
-        CrimeLab.get().addCrime(crime);
-
-        // Start CrimePagerActivity (and CrimeFragment) at the new Crime
-        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
-        startActivity(intent);
     }
 
     // Helper method for setting/removing the subtitle

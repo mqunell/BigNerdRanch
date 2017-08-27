@@ -30,12 +30,12 @@ class CrimeLab {
         mCrimes = new ArrayList<>();
     }
 
-    void addCrime(Crime c) {
-        mCrimes.add(c);
+    void addCrime(Crime crime) {
+        mCrimes.add(crime);
     }
 
-    List<Crime> getCrimes() {
-        return mCrimes;
+    void removeCrime(Crime crime) {
+        mCrimes.remove(crime);
     }
 
     Crime getCrime(UUID id) {
@@ -48,7 +48,7 @@ class CrimeLab {
         return null;
     }
 
-    void removeCrime(Crime crime) {
-        mCrimes.remove(crime);
+    List<Crime> getCrimes() {
+        return mCrimes;
     }
 }
