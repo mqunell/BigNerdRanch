@@ -3,7 +3,7 @@ package com.mattqunell.bignerdranch.criminal_intent;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.mattqunell.bignerdranch.database.CrimeBaseHelper;
+import com.mattqunell.bignerdranch.criminal_intent.database.CrimeBaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;

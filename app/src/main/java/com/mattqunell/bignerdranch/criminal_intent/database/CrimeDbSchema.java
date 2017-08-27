@@ -1,4 +1,4 @@
-package com.mattqunell.bignerdranch.database;
+package com.mattqunell.bignerdranch.criminal_intent.database;
 
 public class CrimeDbSchema {
 
