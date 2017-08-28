@@ -3,15 +3,19 @@ package com.mattqunell.bignerdranch.criminal_intent;
 import java.util.Date;
 import java.util.UUID;
 
-class Crime implements Comparable<Crime> {
+public class Crime implements Comparable<Crime> {
 
     private UUID mId;
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
 
-    Crime() {
-        mId = UUID.randomUUID();
+    public Crime() {
+        this(UUID.randomUUID());
+    }
+
+    public Crime(UUID id) {
+        mId = id;
         mDate = new Date();
     }
 
@@ -23,7 +27,7 @@ class Crime implements Comparable<Crime> {
         return mTitle;
     }
 
-    void setTitle(String title) {
+    public void setTitle(String title) {
         mTitle = title;
     }
 
@@ -31,7 +35,7 @@ class Crime implements Comparable<Crime> {
         return mDate;
     }
 
-    void setDate(Date date) {
+    public void setDate(Date date) {
         mDate = date;
     }
 
@@ -39,7 +43,7 @@ class Crime implements Comparable<Crime> {
         return mSolved;
     }
 
-    void setSolved(boolean solved) {
+    public void setSolved(boolean solved) {
         mSolved = solved;
     }
 
