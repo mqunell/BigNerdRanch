@@ -4,20 +4,20 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-// Import the inner CrimeTable class so it can be called directly, without "CrimeDbSchema."
 import com.mattqunell.bignerdranch.criminal_intent.database.CrimeDbSchema.CrimeTable;
 
+/*
+ * When an instance of CrimeBaseHelper is created, the super(...) call in the constructor does up to
+ * three things, as necessary:
+ *     1. Create the database and set the version number (onCreate(...))
+ *     2. Upgrade the database (onUpgrade(...))
+ *     3. Open the database
+ */
 public class CrimeBaseHelper extends SQLiteOpenHelper {
 
     private static final int VERSION = 1;
     private static final String DATABASE_NAME = "crimeBase.db";
 
-    /*
-     * When a new CrimeBaseHelper is created, the super call creates the database if necessary, and
-     * opens it. If the database gets created, onCreate(SQLiteDatabase) is called, which saves the
-     * latest version number. If the database already exists but is an older version, onUpgrade(...)
-     * is called, which upgrades it.
-     */
     public CrimeBaseHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
     }

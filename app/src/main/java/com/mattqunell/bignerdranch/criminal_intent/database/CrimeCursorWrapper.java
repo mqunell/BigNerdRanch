@@ -9,13 +9,17 @@ import com.mattqunell.bignerdranch.criminal_intent.database.CrimeDbSchema.CrimeT
 import java.util.Date;
 import java.util.UUID;
 
-// Parses Crimes from the database
+/*
+ * CrimeCursorWrapper is used to traverse the database through CursorWrapper's functionality. The
+ * getCrime() method parses and returns the Crime at CrimeCursorWrapper's location in the database.
+ */
 public class CrimeCursorWrapper extends CursorWrapper {
 
     public CrimeCursorWrapper(Cursor cursor) {
         super(cursor);
     }
 
+    // Parses a Crime from the database
     public Crime getCrime() {
         String uuidString = getString(getColumnIndex(CrimeTable.Cols.UUID));
         String title = getString(getColumnIndex(CrimeTable.Cols.TITLE));
