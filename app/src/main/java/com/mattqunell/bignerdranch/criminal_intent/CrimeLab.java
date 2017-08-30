@@ -41,13 +41,14 @@ class CrimeLab {
         mDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
     }
 
+    // Adds a Crime to the database
     void addCrime(Crime crime) {
         ContentValues values = getContentValues(crime);
 
         mDatabase.insert(CrimeTable.NAME, null, values);
     }
 
-    // Edits an existing Crime
+    // Edits an existing Crime in the database
     void updateCrime(Crime crime) {
         String uuidString = crime.getId().toString();
         ContentValues values = getContentValues(crime);
@@ -58,10 +59,16 @@ class CrimeLab {
                 new String[] { uuidString });
     }
 
+    // Removes a Crime from the database
     void removeCrime(Crime crime) {
-        /*mCrimes.remove(crime);*/
+        String uuidString = crime.getId().toString();
+
+        mDatabase.delete(CrimeTable.NAME,
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] { uuidString });
     }
 
+    // Gets a Crime from the database
     Crime getCrime(UUID id) {
         CrimeCursorWrapper cursor = queryCrimes(
                 CrimeTable.Cols.UUID + " = ?",
@@ -81,6 +88,7 @@ class CrimeLab {
         }
     }
 
+    // Gets an ArrayList of all Crimes in the database
     List<Crime> getCrimes() {
         List<Crime> crimes = new ArrayList<>();
 
