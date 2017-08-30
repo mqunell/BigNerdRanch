@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.mattqunell.bignerdranch.R;
 
-import java.util.Collections;
 import java.util.List;
 
 /*
@@ -108,8 +107,8 @@ public class CrimeListFragment extends Fragment {
         /*
          * true has to be returned in each individual case to indicate the processing is done, so
          * that the following cases don't run as well. For example, without returning true in
-         * "case R.id.show_subtitle", the code in "case R.id.sort_crimes" is also ran when the
-         * show_subtitle MenuItem is selected.
+         * "case R.id.new_crime", the code in "case R.id.show_subtitle" is also ran when the
+         * new_crime MenuItem is selected.
          */
 
         switch (item.getItemId()) {
@@ -128,13 +127,6 @@ public class CrimeListFragment extends Fragment {
 
                 updateUi();
                 updateSubtitle();
-
-                return true;
-
-            // "Sort Crimes" selected
-            case R.id.sort_crimes:
-                Collections.sort(CrimeLab.get(getActivity()).getCrimes());
-                updateUi();
 
                 return true;
 

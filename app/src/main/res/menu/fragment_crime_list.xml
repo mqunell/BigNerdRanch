@@ -13,9 +13,4 @@
         android:title="@string/show_subtitle"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/sort_crimes"
-        android:title="@string/sort_crimes"
-        app:showAsAction="never" />
-
 </menu>
