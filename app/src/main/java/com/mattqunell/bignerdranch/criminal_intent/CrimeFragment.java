@@ -162,4 +162,22 @@ public class CrimeFragment extends Fragment {
         //mDateButton.setText(mCrime.getDate().toString());
         mDateButton.setText(DateFormat.format("EEEE, MMM d, yyyy", mCrime.getDate()));
     }
+
+    // Builds a crime report
+    private String getCrimeReport() {
+        String dateFormat = "EEE, MMM dd";
+        String dateString = DateFormat.format(dateFormat, mCrime.getDate()).toString();
+
+        String solvedString = (mCrime.isSolved() ?
+                getString(R.string.crime_report_solved) :
+                getString(R.string.crime_report_unsolved));
+
+        String suspectString = (mCrime.getSuspect() == null ?
+                getString(R.string.crime_report_no_suspect) :
+                getString(R.string.crime_report_suspect));
+
+        // Put the date, solved, and suspect Strings into the "crime_report" format String
+        return getString(R.string.crime_report,
+                mCrime.getTitle(), dateString, solvedString, suspectString);
+    }
 }
