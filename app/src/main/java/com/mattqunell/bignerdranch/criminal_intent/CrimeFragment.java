@@ -43,6 +43,7 @@ public class CrimeFragment extends Fragment {
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckbox;
+    private Button mReportButton;
 
     // Encapsulates the implementation details of new instances of CrimeFragment
     public static CrimeFragment newInstance(UUID crimeId) {
@@ -114,6 +115,28 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mCrime.setSolved(isChecked);
+            }
+        });
+
+        mReportButton = v.findViewById(R.id.crime_report);
+        mReportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create the implicit Intent
+                Intent i = new Intent(Intent.ACTION_SEND);
+
+                // Set the type to plain text
+                i.setType("text/plain");
+
+                // Use constants from the Intent class to add extra information
+                i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
+                i.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+
+                // Force the chooser to show each time
+                i = Intent.createChooser(i, getString(R.string.send_report));
+
+                // Start the new Intent
+                startActivity(i);
             }
         });
 
