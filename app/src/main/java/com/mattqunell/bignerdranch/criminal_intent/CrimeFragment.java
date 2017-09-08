@@ -259,7 +259,7 @@ public class CrimeFragment extends Fragment {
 
         String suspectString = (mCrime.getSuspect() == null ?
                 getString(R.string.crime_report_no_suspect) :
-                getString(R.string.crime_report_suspect));
+                getString(R.string.crime_report_suspect, mCrime.getSuspect()));
 
         // Put the date, solved, and suspect Strings into the "crime_report" format String
         return getString(R.string.crime_report,
