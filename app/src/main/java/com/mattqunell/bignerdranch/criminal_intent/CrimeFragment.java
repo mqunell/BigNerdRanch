@@ -2,7 +2,10 @@ package com.mattqunell.bignerdranch.criminal_intent;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.Editable;
@@ -35,14 +38,16 @@ public class CrimeFragment extends Fragment {
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
 
-    // Request code for targeted Fragment
+    // Request codes for targeted Fragments
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_CONTACT = 1;
 
     // UI elements
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckbox;
+    private Button mSuspectButton;
     private Button mReportButton;
 
     // Encapsulates the implementation details of new instances of CrimeFragment
@@ -76,6 +81,7 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_crime, container, false);
 
+        // Title EditText
         mTitleField = v.findViewById(R.id.crime_title);
         mTitleField.setText(mCrime.getTitle());
         mTitleField.addTextChangedListener(new TextWatcher() {
@@ -95,6 +101,7 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        // Date Button
         mDateButton = v.findViewById(R.id.crime_date);
         updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +116,7 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        // Solved Checkbox
         mSolvedCheckbox = v.findViewById(R.id.crime_solved);
         mSolvedCheckbox.setChecked(mCrime.isSolved());
         mSolvedCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -118,6 +126,22 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        // Suspect Button
+        final Intent pickContact = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+        mSuspectButton = v.findViewById(R.id.crime_suspect);
+        mSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(pickContact, REQUEST_CONTACT);
+            }
+        });
+
+        if (mCrime.getSuspect() != null) {
+            mSuspectButton.setText(mCrime.getSuspect());
+        }
+
+        // Report Button
         mReportButton = v.findViewById(R.id.crime_report);
         mReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,11 +169,41 @@ public class CrimeFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Like in geo_quiz/QuizActivity, the outer if statement is not actually necessary
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_DATE && data != null) {
-            Date date = DatePickerFragment.getSelectedDate(data);
-            mCrime.setDate(date);
-            updateDate();
+        if (resultCode == Activity.RESULT_OK && data != null) {
+
+            if (requestCode == REQUEST_DATE) {
+                Date date = DatePickerFragment.getSelectedDate(data);
+                mCrime.setDate(date);
+                updateDate();
+            }
+            else if (requestCode == REQUEST_CONTACT) {
+                Uri contactUri = data.getData();
+
+                // Specify which fields the query should return values for
+                String[] queryFields = new String[] {
+                        ContactsContract.Contacts.DISPLAY_NAME
+                };
+
+                // Perform the query; the contactUri is like a "where" clause
+                Cursor c = getActivity().getContentResolver()
+                        .query(contactUri, queryFields, null, null, null);
+
+                try {
+                    // Double check that results were received
+                    if (c.getCount() != 0) {
+
+                        // Pull out the first column of the first row of data (suspect's name)
+                        c.moveToFirst();
+                        String suspect = c.getString(0);
+                        mCrime.setSuspect(suspect);
+                        mSuspectButton.setText(suspect);
+
+                    }
+                }
+                finally {
+                    c.close();
+                }
+            }
         }
     }
 
