@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.ShareCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -154,20 +155,23 @@ public class CrimeFragment extends Fragment {
         mReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Create the implicit Intent
-                Intent i = new Intent(Intent.ACTION_SEND);
+                // Set up the necessary Strings
+                String type = "text/plain";
+                String subject = getString(R.string.crime_report_subject);
+                String text = getCrimeReport();
+                String chooserText = getString(R.string.send_report);
 
-                // Set the type to plain text
-                i.setType("text/plain");
+                // Build the Intent
+                Intent i = ShareCompat.IntentBuilder.from(getActivity())
+                        .setType(type)
+                        .setSubject(subject)
+                        .setText(text)
+                        .getIntent();
 
-                // Use constants from the Intent class to add extra information
-                i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
-                i.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+                // Force the chooser to be shown each time with send_report
+                i = Intent.createChooser(i, chooserText);
 
-                // Force the chooser to show each time
-                i = Intent.createChooser(i, getString(R.string.send_report));
-
-                // Start the new Intent
+                // Start the Intent
                 startActivity(i);
             }
         });
