@@ -35,6 +35,21 @@
             android:name=".criminal_intent.CrimeListActivity"
             android:label="@string/criminal_intent">
         </activity>
-    </application>
 
+        <!--
+         authorities: The location files from other apps will be saved to
+         exported: Whether other apps can access this without first gaining permission
+         grantUriPermissions: Ability to grant write permission after sending other apps an intent
+        -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.mattqunell.bignerdranch.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files" />
+        </provider>
+    </application>
 </manifest>

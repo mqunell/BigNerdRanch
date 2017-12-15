@@ -9,6 +9,7 @@ import com.mattqunell.bignerdranch.criminal_intent.database.CrimeBaseHelper;
 import com.mattqunell.bignerdranch.criminal_intent.database.CrimeCursorWrapper;
 import com.mattqunell.bignerdranch.criminal_intent.database.CrimeDbSchema.CrimeTable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -107,6 +108,11 @@ class CrimeLab {
         }
 
         return crimes;
+    }
+
+    public File getPhotoFile(Crime crime) {
+        File filesDir = mContext.getFilesDir();
+        return new File(filesDir, crime.getPhotoFilename());
     }
 
     // Helper method that essentially converts a Crime into a ContentValues

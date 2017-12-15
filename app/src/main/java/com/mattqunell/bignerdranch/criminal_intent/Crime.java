@@ -56,6 +56,10 @@ public class Crime implements Comparable<Crime> {
         mSuspect = suspect;
     }
 
+    public String getPhotoFilename() {
+        return "IMG_" + getId().toString() + ".jpg";
+    }
+
     @Override
     public int compareTo(Crime other) {
         return getDate().compareTo(other.getDate());
