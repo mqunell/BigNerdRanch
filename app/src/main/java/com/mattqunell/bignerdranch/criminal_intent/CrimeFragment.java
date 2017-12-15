@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -101,6 +102,7 @@ public class CrimeFragment extends Fragment {
 
         // Photo ImageView
         mPhotoView = v.findViewById(R.id.crime_photo);
+        updatePhotoView();
 
         // Camera Button
         mPhotoButton = v.findViewById(R.id.crime_camera);
@@ -267,6 +269,16 @@ public class CrimeFragment extends Fragment {
                     c.close();
                 }
             }
+            else if (requestCode == REQUEST_PHOTO) {
+                Uri uri = FileProvider.getUriForFile(getActivity(),
+                        "com.mattqunell.bignerdranch.fileprovider",
+                        mPhotoFile);
+
+                // Revoke the permission after getting the image from the camera app
+                getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                updatePhotoView();
+            }
         }
     }
 
@@ -294,6 +306,13 @@ public class CrimeFragment extends Fragment {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void updatePhotoView() {
+        if (mPhotoFile != null && mPhotoFile.exists()) {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
         }
     }
 
