@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.mattqunell.bignerdranch">
 
-    <!-- Camera isn't necessary, but some parts will be disabled without it -->
+    <!-- Camera isn't necessary, but some features will be disabled without it -->
     <uses-feature
         android:name="android.hardware.camera2"
-        android:required="false" />
+        android:required="false"/>
 
     <application
         android:allowBackup="true"
@@ -50,11 +50,10 @@
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.mattqunell.bignerdranch.fileprovider"
             android:exported="false"
-            android:grantUriPermissions="true" >
-
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/files" />
+                android:resource="@xml/files"/>
         </provider>
     </application>
 </manifest>

@@ -46,6 +46,7 @@ public class CrimeFragment extends Fragment {
 
     // Tags for Bundle argument and DialogFragment
     private static final String ARG_CRIME_ID = "crime_id";
+    private static final String DIALOG_IMAGE = "DialogImage";
     private static final String DIALOG_DATE = "DialogDate";
 
     // Request codes for targeted Fragments
@@ -102,6 +103,18 @@ public class CrimeFragment extends Fragment {
 
         // Photo ImageView
         mPhotoView = v.findViewById(R.id.crime_photo);
+        mPhotoView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                // If the image exists
+                if (mPhotoFile != null && mPhotoFile.exists()) {
+                    FragmentManager manager = getFragmentManager();
+
+                    ImageFragment dialog = ImageFragment.newInstance(mPhotoFile.toString());
+                    dialog.show(manager, DIALOG_IMAGE);
+                }
+            }
+        });
         updatePhotoView();
 
         // Camera Button
@@ -309,6 +322,7 @@ public class CrimeFragment extends Fragment {
         }
     }
 
+    // Helper method for updating the preview ImageView
     private void updatePhotoView() {
         if (mPhotoFile != null && mPhotoFile.exists()) {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
